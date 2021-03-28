@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php //-->
+$inceptFrameworkCLI = function($cwd) {
+  foreach (
+    [
+      $cwd . '/.incept.php',
+      $cwd . '/.incept'
+    ] as $file
+  ) {
+    if (file_exists($file)) {
+      break;
+    }
+  }
+
+  if (!file_exists($file)) {
+    print PHP_EOL . 'Cannot find Incept Bootstrap' . PHP_EOL;
+    die(1);
+  }
+
+  require $file;
+
+  return incept('terminal');
+};
+
+$inceptFrameworkCLI(getcwd())->run();

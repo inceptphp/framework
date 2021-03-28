@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+  backupGlobals="false"
+  backupStaticAttributes="false"
+  colors="true"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  processIsolation="false"
+  stopOnFailure="false"
+  bootstrap="test/bootstrap.php"
+>
+  <testsuites>
+    <testsuite name="Framework Test Suite">
+      <file>test/FrameworkHandler.php</file>
+      <file>test/Decorator.php</file>
+      <file>test/Package/Config/ConfigPackage.php</file>
+      <file>test/Package/Event/EventPackage.php</file>
+      <file>test/Package/Http/HttpPackage.php</file>
+      <file>test/Package/PDO/PDOPackage.php</file>
+    </testsuite>
+  </testsuites>
+
+  <coverage processUncoveredFiles="false" pathCoverage="true">
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+    <exclude>
+      <directory>./vendor</directory>
+      <directory>./test</directory>
+      <file>src/Package/Event/.incept.php</file>
+      <file>src/Package/Http/.incept.php</file>
+      <file>src/Package/Resolver/.incept.php</file>
+      <file>src/Package/Terminal/.incept.php</file>
+      <file>src/Package/Config/.incept.php</file>
+      <file>src/Package/PDO/.incept.php</file>
+      <file>src/Package/Language/.incept.php</file>
+      <file>src/Package/Timezone/.incept.php</file>
+    </exclude>
+  </coverage>
+</phpunit>
