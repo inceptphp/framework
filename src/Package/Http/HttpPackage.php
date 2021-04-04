@@ -117,7 +117,7 @@ class HttpPackage
    */
   public function options(string $path, $callback, ...$args): HttpPackage
   {
-    return $this->route('get', $path, $callback, ...$args);
+    return $this->route('options', $path, $callback, ...$args);
   }
 
   /**
