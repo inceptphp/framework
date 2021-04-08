@@ -8,6 +8,8 @@
 
 namespace Incept\Framework;
 
+use Closure;
+
 use UGComponents\Package\PackageHandler;
 
 use UGComponents\IO\IOTrait;
@@ -96,13 +98,31 @@ class FrameworkHandler extends PackageHandler
   }
 
   /**
+   * Quick Define and call method helper
+   *
+   * @param *callable $callback
+   * @param ...mixed  $args
+   *
+   * @return mixed
+   */
+  public function call(callable $callback, ...$args)
+  {
+    if ($callback instanceof Closure) {
+      $callback = $callback->bindTo($this, get_class($this));
+    }
+
+    //and return the results
+    return call_user_func_array($callback, $args);
+  }
+
+  /**
    * Adds error middleware but also sends to http and terminal
    *
    * @param *callable $callback The middleware handler
    *
-   * @return ErrorProcessorTrait
+   * @return FrameworkHandler
    */
-  public function error(callable $callback)
+  public function error(callable $callback): FrameworkHandler
   {
     $this->errorIO($callback);
     $callback = $this->bindCallback($callback);
@@ -152,9 +172,9 @@ class FrameworkHandler extends PackageHandler
    *
    * @param *callable $callback The middleware handler
    *
-   * @return PreProcessorTrait
+   * @return FrameworkHandler
    */
-  public function preprocess(callable $callback)
+  public function preprocess(callable $callback): FrameworkHandler
   {
     $this->preprocessIO($callback);
     $callback = $this->bindCallback($callback);
@@ -175,9 +195,9 @@ class FrameworkHandler extends PackageHandler
    *
    * @param *callable $callback The middleware handler
    *
-   * @return PostProcessorTrait
+   * @return FrameworkHandler
    */
-  public function postprocess(callable $callback)
+  public function postprocess(callable $callback): FrameworkHandler
   {
     $this->postprocessIO($callback);
     $callback = $this->bindCallback($callback);

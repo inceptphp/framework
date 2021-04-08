@@ -58,13 +58,13 @@ class EventPackage
   }
 
   /**
-   * Runs an event like a method
+   * Calls an event like a method
    *
    * @param bool $load whether to load the RnRs
    *
    * @return array
    */
-  public function method($event, $request = [], Response $response = null)
+  public function call($event, $request = [], Response $response = null)
   {
     if (is_array($request)) {
       $request = Request::i()->load()->set('stage', [])->setStage($request);
