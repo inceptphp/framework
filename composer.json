@@ -3,7 +3,7 @@
   "type": "library",
   "description": "Incept Framework Core Library",
   "keywords": [
-    "framework",
+    "framework"
   ],
   "license": "MIT",
   "require-dev": {
