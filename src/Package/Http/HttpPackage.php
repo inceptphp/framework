@@ -158,12 +158,14 @@ class HttpPackage
    */
   public function redirect(string $path, bool $force = false): HttpPackage
   {
+    // @codeCoverageIgnoreStart
     if ($force) {
       header('Location: ' . $path);
       exit;
     }
+    // @codeCoverageIgnoreEnd
 
-    ($this->handler)('io')->getResponse()->addHeader('Location', $path);
+    ($this->handler)('http')->getResponse()->addHeader('Location', $path);
     return $this;
   }
 
@@ -191,10 +193,10 @@ class HttpPackage
       //if it's a string
       if (is_string($callback)) {
         //it's an event
-        $event = $callback;
+        $flow = $callback;
         //make into callback
-        $callback = function ($request, $response) use ($event) {
-          $this->handler->package('event')->emit($event, $request, $response);
+        $callback = function (...$args) use ($flow) {
+          $this('event')->emit($flow, ...$args);
         };
       }
 

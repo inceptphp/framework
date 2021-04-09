@@ -8,6 +8,8 @@
 
 namespace Incept\Framework\Package\Host;
 
+use Incept\Framework\FrameworkHandler;
+
 /**
  * Host Package
  *
@@ -17,6 +19,21 @@ namespace Incept\Framework\Package\Host;
  */
 class HostPackage
 {
+  /**
+   * @var *PackageHandler $handler
+   */
+  protected $handler;
+
+  /**
+   * Add handler for scope when routing
+   *
+   * @param *PackageHandler $handler
+   */
+  public function __construct(FrameworkHandler $handler)
+  {
+    $this->handler = $handler;
+  }
+
   /**
    * Returns all host values
    *
@@ -48,10 +65,6 @@ class HostPackage
     $base = $this->url();
     if (strpos($base, '?') !== false) {
       $base = substr($base, 0, strpos($base, '?'));
-    }
-
-    if (substr($base, -1) === '/') {
-      $base = substr($base, 0, -1);
     }
 
     return $base;
@@ -96,7 +109,7 @@ class HostPackage
       $protocol = 'https';
     }
 
-    if (incept('config')->get('settings', 'https')) {
+    if (($this->handler)('config')->get('settings', 'https')) {
       $protocol = 'https';
     }
 
@@ -112,7 +125,7 @@ class HostPackage
    */
   public function path(): string
   {
-    $path = $this->relative();
+    $path = $_SERVER['REQUEST_URI'];
     if (strpos($path, '?') !== false) {
       $path = substr($path, 0, strpos($path, '?'));
     }
@@ -133,7 +146,15 @@ class HostPackage
    */
   public function relative(): string
   {
-    return $_SERVER['REQUEST_URI'];
+    $query = null;
+    $path = $this->path();
+    $uri = $_SERVER['REQUEST_URI'];
+
+    if (strpos($uri, '?') !== false) {
+      $query = substr($uri, strpos($uri, '?'));
+    }
+
+    return $path . $query;
   }
 
   /**

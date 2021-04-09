@@ -81,10 +81,12 @@ class ConfigPackage
 
     $source = sprintf('%s/%s.php', $this->path, $file);
 
+    // @codeCoverageIgnoreStart
     //make sure we have the data from the file
     if (!$this->exists($file) && file_exists($source)) {
       $this->registry->set($file, include $source);
     }
+    // @codeCoverageIgnoreEnd
 
     if (empty($path)) {
       return $this->registry->get($file);
@@ -131,17 +133,21 @@ class ConfigPackage
 
     $destination = sprintf('%s/%s.php', $this->path, $file);
 
+    // @codeCoverageIgnoreStart
     //make sure we have the data from the file
     if (!$this->exists($file) && file_exists($destination)) {
       $this->registry->set($file, include $destination);
     }
+    // @codeCoverageIgnoreEnd
 
     //set the registry
     $this->registry->set($file, ...$path);
 
+    // @codeCoverageIgnoreStart
     if (!is_dir(dirname($destination))) {
       mkdir(dirname($destination), 0777, true);
     }
+    // @codeCoverageIgnoreEnd
 
     //save the file
     file_put_contents($destination, sprintf(

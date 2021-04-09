@@ -34,6 +34,20 @@ class Framework_FrameworkHandler_Test extends TestCase
   }
 
   /**
+   * @covers Incept\Framework\FrameworkHandler::call
+   */
+  public function testCall()
+  {
+    $actual = new StdClass();
+    $actual->count = 0;
+    $this->object->call(function($number) use ($actual) {
+      $actual->count = $number;
+    }, 1);
+
+    $this->assertEquals(1, $actual->count);
+  }
+
+  /**
    * @covers Incept\Framework\FrameworkHandler::makePayload
    */
   public function testMakePayload()
@@ -95,7 +109,6 @@ class Framework_FrameworkHandler_Test extends TestCase
   }
 
   /**
-   * @covers Incept\Framework\FrameworkHandler::on
    */
   public function testEventSync()
   {

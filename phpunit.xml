@@ -14,8 +14,10 @@
     <testsuite name="Framework Test Suite">
       <file>test/FrameworkHandler.php</file>
       <file>test/Decorator.php</file>
+      <file>test/Package/Config/ConfigException.php</file>
       <file>test/Package/Config/ConfigPackage.php</file>
       <file>test/Package/Event/EventPackage.php</file>
+      <file>test/Package/Host/HostPackage.php</file>
       <file>test/Package/Http/HttpPackage.php</file>
       <file>test/Package/PDO/PDOPackage.php</file>
     </testsuite>

@@ -23,6 +23,8 @@ use UGComponents\IO\Response;
 
 use Incept\Framework\FrameworkHandler;
 
+use Closure;
+
 /**
  * Event Package
  *
@@ -111,10 +113,10 @@ class EventPackage
       //if it's a string
       if (is_string($callback)) {
         //it's an event
-        $event = $callback;
+        $flow = $callback;
         //make into callback
-        $callback = function ($request, $response) use ($event) {
-          $this->handler->package('event')->emit($event, $request, $response);
+        $callback = function (...$args) use ($flow) {
+          $this('event')->emit($flow, ...$args);
         };
       }
 

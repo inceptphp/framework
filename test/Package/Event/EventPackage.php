@@ -36,14 +36,14 @@ class Framework_Event_EventPackage_Test extends TestCase
   }
 
   /**
-   * @covers Incept\Framework\Package\Event\EventPackage::method
+   * @covers Incept\Framework\Package\Event\EventPackage::call
    */
-  public function testMethod()
+  public function testCall()
   {
     $trigger = new StdClass();
     $trigger->success = false;
     $trigger->stage = [];
-    $this->object->on('method-test', function($req, $res) use ($trigger) {
+    $this->object->on('call-test', function($req, $res) use ($trigger) {
       $trigger->success = true;
       $trigger->stage = $req->getStage();
 
@@ -54,7 +54,11 @@ class Framework_Event_EventPackage_Test extends TestCase
       $res->setResults('works');
     });
 
-    $results = $this->object->method('method-test');
+    $this->object->on('call-test-2', function($req, $res) use ($trigger) {
+      $trigger->success = true;
+    });
+
+    $results = $this->object->call('call-test');
 
     $this->assertTrue($trigger->success);
     $this->assertTrue(empty($trigger->stage));
@@ -62,7 +66,7 @@ class Framework_Event_EventPackage_Test extends TestCase
 
     $trigger->success = false;
     $trigger->stage = [];
-    $results = $this->object->method('method-test', ['foo' => 'bar']);
+    $results = $this->object->call('call-test', ['foo' => 'bar']);
 
     $this->assertTrue($trigger->success);
     $this->assertEquals('bar', $trigger->stage['foo']);
@@ -70,9 +74,35 @@ class Framework_Event_EventPackage_Test extends TestCase
 
     $trigger->success = false;
     $trigger->stage = [];
-    $results = $this->object->method('method-test', ['fail' => true]);
+    $results = $this->object->call('call-test', ['fail' => true]);
 
     $this->assertTrue($trigger->success);
     $this->assertFalse($results);
+
+    $trigger->success = false;
+    $results = $this->object->call('call-test-2', null);
+
+    $this->assertTrue($trigger->success);
+  }
+
+  /**
+   * @covers Incept\Framework\Package\Event\EventPackage::on
+   */
+  public function testOn()
+  {
+    $actual = new StdClass();
+    $actual->count = 0;
+    $this->object->on('foobar', function() use ($actual) {
+      $actual->count++;
+    }, 'barfoo', function() use ($actual) {
+      $actual->count++;
+    });
+
+    $this->object->on('barfoo', function() use ($actual) {
+      $actual->count++;
+    }, 1);
+
+    $this->object->emit('foobar');
+    $this->assertEquals(3, $actual->count);
   }
 }

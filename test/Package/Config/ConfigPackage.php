@@ -22,7 +22,6 @@ class Framework_Config_ConfigPackage_Test extends TestCase
   protected function setUp(): void
   {
     $this->object = new ConfigPackage;
-    $this->object->setFolder(dirname(dirname(__DIR__)) . '/assets/config');
   }
 
   /**
@@ -40,7 +39,35 @@ class Framework_Config_ConfigPackage_Test extends TestCase
    */
   public function testSet()
   {
-    $this->object->set('foo/bar/zoo', [
+    try {
+      $this->object->exists('foo');
+    } catch(ConfigException $e) {
+      $message = $e->getMessage();
+    }
+
+    $this->assertEquals('Folder not set. Try $config->setFolder(string).', $message);
+
+    try {
+      $this->object->get('foo');
+    } catch(ConfigException $e) {
+      $message = $e->getMessage();
+    }
+
+    $this->assertEquals('Folder not set. Try $config->setFolder(string).', $message);
+
+    try {
+      $this->object->set('foo');
+    } catch(ConfigException $e) {
+      $message = $e->getMessage();
+    }
+
+    $this->assertEquals('Folder not set. Try $config->setFolder(string).', $message);
+
+    $this->object->setFolder(dirname(dirname(__DIR__)) . '/assets/config');
+
+    $this->assertEquals('zoo', $this->object->get('foo/bar/zoo', 'foo', 'bar'));
+
+    $this->object->set('foo/bar/zoo')->set('foo/bar/zoo', [
       'foo' => [
         'bar' => 'zoo',
         'zoo' => 'foo'
@@ -60,5 +87,27 @@ class Framework_Config_ConfigPackage_Test extends TestCase
 
     $this->assertEquals('zoo', $this->object->get('foo/bar/zoo')['bar']['foo']['bar']);
     $this->assertEquals('zoo', $this->object->get('foo/bar/zoo', 'bar', 'foo', 'bar'));
+    $this->assertTrue($this->object->exists('foo/bar/zoo', 'bar'));
+  }
+
+  /**
+   * @covers Incept\Framework\Package\Config\ConfigPackage::setFolder
+   * @covers Incept\Framework\Package\Config\ConfigPackage::getFolder
+   */
+  public function testSetFolder()
+  {
+    $folder = dirname(dirname(__DIR__)) . '/assets/config';
+
+    $this->object->setFolder($folder);
+    $this->assertEquals($folder, $this->object->getFolder());
+    $this->assertEquals($folder . '/bar', $this->object->getFolder('bar'));
+
+    try {
+      $this->object->setFolder('foo');
+    } catch(ConfigException $e) {
+      $message = $e->getMessage();
+    }
+
+    $this->assertEquals('Folder foo was not found', $message);
   }
 }

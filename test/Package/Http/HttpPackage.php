@@ -13,6 +13,11 @@ use Incept\Framework\FrameworkHandler;
 class Framework_Http_HttpPackage_Test extends TestCase
 {
   /**
+   * @var FrameworkHandler
+   */
+  protected $handler;
+
+  /**
    * @var HttpPackage
    */
   protected $object;
@@ -23,8 +28,8 @@ class Framework_Http_HttpPackage_Test extends TestCase
    */
   protected function setUp(): void
   {
-    $handler = new FrameworkHandler;
-    $this->object = new HttpPackage($handler);
+    $this->handler = new FrameworkHandler;
+    $this->object = new HttpPackage($this->handler);
   }
 
   /**
@@ -63,6 +68,15 @@ class Framework_Http_HttpPackage_Test extends TestCase
   }
 
   /**
+   * @covers Incept\Framework\Package\Http\HttpPackage::options
+   */
+  public function testOptions()
+  {
+    $instance = $this->object->options('/foo/bar', function() {});
+    $this->assertInstanceOf(HttpPackage::class, $instance);
+  }
+
+  /**
    * @covers Incept\Framework\Package\Http\HttpPackage::post
    */
   public function testPost()
@@ -81,17 +95,41 @@ class Framework_Http_HttpPackage_Test extends TestCase
   }
 
   /**
+   * @covers Incept\Framework\Package\Http\HttpPackage::redirect
+   */
+  public function testRedirect()
+  {
+    $instance = $this->object->redirect('/foo/bar');
+    $this->assertInstanceOf(HttpPackage::class, $instance);
+  }
+
+  /**
    * @covers Incept\Framework\Package\Http\HttpPackage::route
    */
   public function testRoute()
   {
-    $instance = $this->object->route('foobar', '/foo/bar', function() {});
+    $actual = new StdClass();
+    $actual->count = 0;
+
+    $instance = $this->object->route('foobar', '/foo/bar', function() use ($actual) {
+      $actual->count ++;
+    }, 5);
     $this->assertInstanceOf(HttpPackage::class, $instance);
 
-    $instance = $this->object->route('foobar', '/foo/bar', 'foobar');
+    $instance = $this->object->route('foobar', '/foo/bar', function() use ($actual) {
+      $actual->count ++;
+    }, 'foobar');
     $this->assertInstanceOf(HttpPackage::class, $instance);
 
-    $instance = $this->object->route('foobar', '/foo/bar', 'foobar', 'foobar2');
-    $this->assertInstanceOf(HttpPackage::class, $instance);
+    ($this->handler)('event')->on('foobar', function() use ($actual) {
+      $actual->count ++;
+    });
+
+    $payload = $this->handler->makePayload(false);
+    $payload['request']->set('method', 'foobar');
+    $payload['request']->set('path', 'string', '/foo/bar');
+    $this->object->getRouter()->process($payload['request']);
+
+    $this->assertEquals(3, $actual->count);
   }
 }

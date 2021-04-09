@@ -71,18 +71,22 @@ class PDOPackage
       $user = $config['user'];
     }
 
+    // @codeCoverageIgnoreStart
     //if pass
     if (isset($config['pass']) && $config['pass']) {
       //set pass string
       $pass = $config['pass'];
     }
+    // @codeCoverageIgnoreEnd
 
     $options = [];
+    // @codeCoverageIgnoreStart
     //if options
     if (isset($config['options']) && is_array($config['options'])) {
       //set options
       $options = $config['options'];
     }
+    // @codeCoverageIgnoreEnd
 
     $type = 'mysql';
     if (isset($config['type']) && $config['type']) {
