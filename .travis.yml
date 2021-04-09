@@ -4,11 +4,15 @@ php:
 env:
   global:
     - XDEBUG_MODE=coverage
+services:
+  - mysql
 install:
   - /home/travis/.phpenv/versions/8.0/bin/composer install
   - phpenv rehash
 before_script:
   - mkdir -p build/logs
+  - mysql -e 'create database testing_db;'
+  - sudo mysql --version
 script:
   - vendor/bin/phpcs
   - XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover build/logs/clover.xml
