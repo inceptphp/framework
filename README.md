@@ -1,13 +1,13 @@
 # Incept Framework
 
 [![Travis CI](https://travis-ci.org/inceptphp/framework.svg?branch=main)](https://travis-ci.org/inceptphp/framework)
-[![Coverage Status](https://coveralls.io/repos/github/inceptphp/framework/badge.svg?branch=master)](https://coveralls.io/github/inceptphp/framework?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/inceptphp/framework/badge.svg?branch=main)](https://coveralls.io/github/inceptphp/framework?branch=main)
 [![Latest Stable Version](https://poser.pugx.org/inceptphp/framework/v/stable)](https://packagist.org/packages/inceptphp/framework)
 [![Total Downloads](https://poser.pugx.org/inceptphp/framework/downloads)](https://packagist.org/packages/inceptphp/framework)
 [![Latest Unstable Version](https://poser.pugx.org/inceptphp/framework/v/unstable)](https://packagist.org/packages/inceptphp/framework)
 [![License](https://poser.pugx.org/inceptphp/framework/license)](https://packagist.org/packages/inceptphp/framework)
 
-====
+----
 
 <a name="contributing"></a>
 # Contributing
