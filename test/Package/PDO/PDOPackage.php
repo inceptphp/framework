@@ -48,7 +48,7 @@ class Framework_PDO_PDOPackage_Test extends TestCase
    */
   public function testLoad()
   {
-    $actual = $this->framework->package('pdo')->getPackageMap();
+    $actual = $this->framework->package('pdo')->getPackageMethods();
     $this->assertInstanceOf(PDOPackage::class, $actual);
 
     $this->framework->package('pdo')->loadConfig([
@@ -60,7 +60,7 @@ class Framework_PDO_PDOPackage_Test extends TestCase
       'pass' => ''
     ]);
 
-    $actual = $this->framework->package('pdo')->getPackageMap();
+    $actual = $this->framework->package('pdo')->getPackageMethods();
     $this->assertInstanceOf(PDO::class, $actual);
   }
 }

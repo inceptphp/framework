@@ -28,6 +28,16 @@ class PDOPackage
   protected $handler;
 
   /**
+   * @var *array $connections
+   */
+  protected array $connections = [];
+
+  /**
+   * @var *array $registry
+   */
+  protected array $registry = [];
+
+  /**
    * Add handler for scope when routing
    *
    * @param *PackageHandler $handler
@@ -38,13 +48,108 @@ class PDOPackage
   }
 
   /**
-   * Mutates to PDO using the given config
+   * Disconnect a PDO resource
    *
-   * @param *array $config
+   * @param *string $name
    *
-   * @return Package
+   * @return PDOPackage
    */
-  public function loadConfig(array $config): Package
+  public function disconnect(string $name): PDOPackage
+  {
+    if (isset($this->connections[$name])) {
+      $this->connections[$name] = null;
+      unset($this->connections[$name]);
+    }
+
+    return $this;
+  }
+
+  /**
+   * returns a PDO resource
+   *
+   * @param *string $name
+   * @param bool    $makeResource
+   *
+   * @return mixed
+   */
+  public function get(string $name, bool $makeResource = true)
+  {
+    //if it's not in the registry
+    if (!isset($this->registry[$name])) {
+      return null;
+    }
+
+    if (!$makeResource) {
+      return $this->registry[$name];
+    }
+
+    //if no connection was made
+    if (!isset($this->connections[$name])) {
+      //assume the registry is a PDO resource
+      $resource = $this->registry[$name];
+      //if the resource is an array however,
+      if (is_array($resource)) {
+        //make it into a resource
+        $resource = $this->makeResource($resource);
+      }
+
+      //set the connnection
+      $this->connections[$name] = $resource;
+    }
+
+    //return the connection
+    return $this->connections[$name];
+  }
+
+  /**
+   * Returns true if the named resource is connected to the DB
+   *
+   * @param *string $name
+   *
+   * @return bool
+   */
+  public function connected(string $name)
+  {
+    //if it's not in the registry
+    if (!isset($this->registry[$name])) {
+      //it's not connected
+      return false;
+    }
+
+    //return true if there is a connection
+    return isset($this->connections[$name])
+      //or the registry name is a PDO resource
+      || $this->registry[$name] instanceof PDO;
+  }
+
+  /**
+   * Registers a PDO
+   *
+   * @param *string    $name
+   * @param *PDO|array $resource
+   *
+   * @return PDOPackage
+   */
+  public function register(string $name, array|PDO $resource): PDOPackage
+  {
+    //if it's registered
+    if (isset($this->registry[$name])) {
+      //release the resource first
+      $this->disconnect($name);
+    }
+
+    $this->registry[$name] = $resource;
+    return $this;
+  }
+
+  /**
+   * Makes a PDO resource from a config array
+   *
+   * @param *array $resource
+   *
+   * @return PDO
+   */
+  protected function makeResource(array $config)
   {
     $host = $port = $name = $user = $pass = '';
     //if host
@@ -100,28 +205,50 @@ class PDOPackage
     $resolver = $this->handler->package('resolver');
 
     //load the pdo
-    return $this->loadPDO($resolver->resolve(
+    return $resolver->resolve(
       PDO::class,
       $connection,
       $user,
       $pass,
       $options
-    ));
+    );
   }
 
   /**
-   * Mutates to PDO using the given config
+   * Removes all PDO connections
    *
-   * @param *PDO $resource
-   *
-   * @return Package
+   * @return PDOPackage
    */
-  public function loadPDO(PDO $resource): Package
+  public function purgeRegistry(): PDOPackage
   {
-    //get the PDO package
-    $package = $this->handler->package('pdo');
-    //set the resource
-    $package->mapPackageMethods($resource);
-    return $package;
+    //empty one by one, releasing the PDO resource pointer
+    foreach(array_keys($this->registry) as $name) {
+      $this->unregister($name);
+    }
+    $this->registry = [];
+    return $this;
+  }
+
+  /**
+   * Removes a PDO from the registry
+   *
+   * @param *string $name
+   *
+   * @return PDOPackage
+   */
+  public function unregister(string $name): PDOPackage
+  {
+    //if there's a connection
+    if (isset($this->connections[$name])) {
+      //disconnect
+      $this->disconnect($name);
+    }
+
+    if (isset($this->registry[$name])) {
+      $this->registry[$name] = null;
+      unset($this->registry[$name]);
+    }
+
+    return $this;
   }
 }

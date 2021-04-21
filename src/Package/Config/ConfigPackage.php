@@ -115,6 +115,17 @@ class ConfigPackage
   }
 
   /**
+   * Removes everything from the registry
+   *
+   * @return ConfigPackage
+   */
+  public function purge()
+  {
+    $this->registry->set([]);
+    return $this;
+  }
+
+  /**
    * Sets the origin where all configs are located
    *
    * @param *string $pathh whether to load the RnRs
