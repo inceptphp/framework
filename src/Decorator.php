@@ -9,7 +9,7 @@
 namespace
 
 {
-  use Incept\Framework\FrameworkHandler;
+  use Incept\Framework\Framework;
 
   if (!function_exists('incept')) {
     /**
@@ -42,7 +42,7 @@ namespace
       //if no framework set
       if (is_null($framework)) {
         //set a new framework
-        $framework = new FrameworkHandler;
+        $framework = new Framework;
       }
 
       //if no arguments

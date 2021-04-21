@@ -39,7 +39,7 @@ class Framework_Decorator_Test extends TestCase
    */
   public function testIncept()
   {
-    $this->assertInstanceOf(FrameworkHandler::class, incept());
+    $this->assertInstanceOf(Framework::class, incept());
     $this->assertInstanceOf(Package::class, incept('event'));
     $this->assertEquals('foobar', incept(function() {
       return 'foobar';

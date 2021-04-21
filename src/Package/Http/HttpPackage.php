@@ -22,7 +22,7 @@ use UGComponents\Profiler\LoggerTrait;
 
 use UGComponents\Resolver\StateTrait;
 
-use Incept\Framework\FrameworkHandler;
+use Incept\Framework\Framework;
 
 /**
  * Http Package
@@ -59,7 +59,7 @@ class HttpPackage
    *
    * @param *PackageHandler $handler
    */
-  public function __construct(FrameworkHandler $handler)
+  public function __construct(Framework $handler)
   {
     $this->handler = $handler;
   }

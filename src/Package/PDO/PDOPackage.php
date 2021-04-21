@@ -11,7 +11,7 @@ namespace Incept\Framework\Package\PDO;
 use PDO;
 
 use UGComponents\Package\Package;
-use Incept\Framework\FrameworkHandler;
+use Incept\Framework\Framework;
 
 /**
  * PDO Package
@@ -42,7 +42,7 @@ class PDOPackage
    *
    * @param *PackageHandler $handler
    */
-  public function __construct(FrameworkHandler $handler)
+  public function __construct(Framework $handler)
   {
     $this->handler = $handler;
   }

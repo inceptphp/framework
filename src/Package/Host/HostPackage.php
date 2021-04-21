@@ -8,7 +8,7 @@
 
 namespace Incept\Framework\Package\Host;
 
-use Incept\Framework\FrameworkHandler;
+use Incept\Framework\Framework;
 
 /**
  * Host Package
@@ -29,7 +29,7 @@ class HostPackage
    *
    * @param *PackageHandler $handler
    */
-  public function __construct(FrameworkHandler $handler)
+  public function __construct(Framework $handler)
   {
     $this->handler = $handler;
   }

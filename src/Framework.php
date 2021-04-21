@@ -35,7 +35,7 @@ use UGComponents\Resolver\StateTrait;
  * @package  Package
  * @standard PSR-2
  */
-class FrameworkHandler extends PackageHandler
+class Framework extends PackageHandler
 {
   use IOTrait,
     EventTrait,
@@ -91,6 +91,8 @@ class FrameworkHandler extends PackageHandler
       ->register('lang', sprintf('%s/Package/Language', __DIR__))
       //register the tz
       ->register('tz', sprintf('%s/Package/Timezone', __DIR__))
+      //register the system
+      ->register('system', sprintf('%s/Package/System', __DIR__))
       //use one global resolver
       ->setResolverHandler($this('resolver')->getResolverHandler())
       //use one global event emitter
@@ -120,9 +122,9 @@ class FrameworkHandler extends PackageHandler
    *
    * @param *callable $callback The middleware handler
    *
-   * @return FrameworkHandler
+   * @return Framework
    */
-  public function error(callable $callback): FrameworkHandler
+  public function error(callable $callback): Framework
   {
     $this->errorIO($callback);
     $callback = $this->bindCallback($callback);
@@ -172,9 +174,9 @@ class FrameworkHandler extends PackageHandler
    *
    * @param *callable $callback The middleware handler
    *
-   * @return FrameworkHandler
+   * @return Framework
    */
-  public function preprocess(callable $callback): FrameworkHandler
+  public function preprocess(callable $callback): Framework
   {
     $this->preprocessIO($callback);
     $callback = $this->bindCallback($callback);
@@ -195,9 +197,9 @@ class FrameworkHandler extends PackageHandler
    *
    * @param *callable $callback The middleware handler
    *
-   * @return FrameworkHandler
+   * @return Framework
    */
-  public function postprocess(callable $callback): FrameworkHandler
+  public function postprocess(callable $callback): Framework
   {
     $this->postprocessIO($callback);
     $callback = $this->bindCallback($callback);

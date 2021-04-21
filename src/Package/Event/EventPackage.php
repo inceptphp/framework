@@ -21,7 +21,7 @@ use UGComponents\Resolver\StateTrait;
 use UGComponents\IO\Request;
 use UGComponents\IO\Response;
 
-use Incept\Framework\FrameworkHandler;
+use Incept\Framework\Framework;
 
 use Closure;
 
@@ -54,7 +54,7 @@ class EventPackage
    *
    * @param *PackageHandler $handler
    */
-  public function __construct(FrameworkHandler $handler)
+  public function __construct(Framework $handler)
   {
     $this->handler = $handler;
   }

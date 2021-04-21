@@ -12,7 +12,7 @@
 >
   <testsuites>
     <testsuite name="Framework Test Suite">
-      <file>test/FrameworkHandler.php</file>
+      <file>test/Framework.php</file>
       <file>test/Decorator.php</file>
       <file>test/Package/Config/ConfigException.php</file>
       <file>test/Package/Config/ConfigPackage.php</file>

@@ -1,4 +1,10 @@
 <?php //-->
+/**
+ * This file is part of the Incept Project.
+ *
+ * Copyright and license information can be found at LICENSE.txt
+ * distributed with this package.
+ */
 
 use Incept\Framework\Package\Event\EventPackage;
 
