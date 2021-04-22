@@ -44,14 +44,15 @@ class Framework_PDO_PDOPackage_Test extends TestCase
 
   /**
    * @covers Incept\Framework\Package\PDO\PDOPackage::loadConfig
-   * @covers Incept\Framework\Package\PDO\PDOPackage::loadPDO
+   * @covers Incept\Framework\Package\PDO\PDOPackage::register
+   * @covers Incept\Framework\Package\PDO\PDOPackage::get
    */
   public function testLoad()
   {
     $actual = $this->framework->package('pdo')->getPackageMethods();
-    $this->assertInstanceOf(PDOPackage::class, $actual);
+    $this->assertTrue(is_array($actual));
 
-    $this->framework->package('pdo')->loadConfig([
+    $this->framework->package('pdo')->register('test', [
       'type' => 'mysql',
       'host' => '127.0.0.1',
       'port' => '3306',
@@ -60,7 +61,7 @@ class Framework_PDO_PDOPackage_Test extends TestCase
       'pass' => ''
     ]);
 
-    $actual = $this->framework->package('pdo')->getPackageMethods();
+    $actual = $this->framework->package('pdo')->get('test');
     $this->assertInstanceOf(PDO::class, $actual);
   }
 }

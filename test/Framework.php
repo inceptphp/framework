@@ -80,8 +80,8 @@ class Framework_Framework_Test extends TestCase
    */
   public function testPreprocess()
   {
-    $http = ($this->object)('http')->getPreProcessor();
-    $terminal = ($this->object)('terminal')->getPreProcessor();
+    $http = ($this->object)('http')->getPreprocessor();
+    $terminal = ($this->object)('terminal')->getPreprocessor();
 
     $this->assertTrue($http->isEmpty());
     $this->assertTrue($terminal->isEmpty());
@@ -98,8 +98,8 @@ class Framework_Framework_Test extends TestCase
    */
   public function testPostprocess()
   {
-    $http = ($this->object)('http')->getPostProcessor();
-    $terminal = ($this->object)('terminal')->getPostProcessor();
+    $http = ($this->object)('http')->getPostprocessor();
+    $terminal = ($this->object)('terminal')->getPostprocessor();
 
     $instance = $this->object->postprocess(function() {});
     $this->assertInstanceOf(Framework::class, $instance);
