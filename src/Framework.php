@@ -126,8 +126,11 @@ class Framework extends PackageHandler
    */
   public function error(callable $callback): Framework
   {
+    if ($callback instanceof Closure) {
+      $callback = $this->bindCallback($callback);
+    }
+
     $this->errorIO($callback);
-    $callback = $this->bindCallback($callback);
 
     if ($this->isPackage('http')) {
       $this->package('http')->getErrorProcessor()->register($callback);
@@ -178,8 +181,11 @@ class Framework extends PackageHandler
    */
   public function preprocess(callable $callback): Framework
   {
+    if ($callback instanceof Closure) {
+      $callback = $this->bindCallback($callback);
+    }
+
     $this->preprocessIO($callback);
-    $callback = $this->bindCallback($callback);
 
     if ($this->isPackage('http')) {
       $this->package('http')->getPreprocessor()->register($callback);
@@ -201,8 +207,11 @@ class Framework extends PackageHandler
    */
   public function postprocess(callable $callback): Framework
   {
+    if ($callback instanceof Closure) {
+      $callback = $this->bindCallback($callback);
+    }
+
     $this->postprocessIO($callback);
-    $callback = $this->bindCallback($callback);
 
     if ($this->isPackage('http')) {
       $this->package('http')->getPostprocessor()->register($callback);
