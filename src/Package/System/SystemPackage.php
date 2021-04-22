@@ -13,6 +13,7 @@ use UGComponents\Package\Package;
 
 use Incept\Framework\Framework;
 use Incept\Framework\Schema;
+use Incept\Framework\Fieldset;
 
 /**
  * System Package
@@ -772,5 +773,27 @@ class SystemPackage
     }
 
     return $organized;
+  }
+
+  /**
+   * Sets the fieldset folder
+   *
+   * @param *PackageHandler $handler
+   */
+  public function setFieldsetFolder(string $folder): SystemPackage
+  {
+    Fieldset::setFolder($folder);
+    return $this;
+  }
+
+  /**
+   * Sets the schema folder
+   *
+   * @param *PackageHandler $handler
+   */
+  public function setSchemaFolder(string $folder): SystemPackage
+  {
+    Schema::setFolder($folder);
+    return $this;
   }
 }
