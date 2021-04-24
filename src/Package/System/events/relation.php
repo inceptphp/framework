@@ -343,3 +343,60 @@ $this('event')->on('system-relation-unlink-all', function (
     $response->setError(true, $e->getMessage());
   }
 });
+
+/**
+ * System Relation [Schema 1] Link [Schema 2] Job
+ *
+ * @param RequestInterface $request
+ * @param ResponseInterface $response
+ */
+$this('event')->on('system-relation-%s-link-%s', function (
+  RequestInterface $request,
+  ResponseInterface $response
+) {
+  $meta = $this('event')->getEventEmitter()->getMeta();
+
+  if (isset($meta['variables'][0])) {
+    $request->setStage('schema1', $meta['variables'][0]);
+    $request->setStage('schema2', $meta['variables'][1]);
+    $this('event')->emit('system-relation-link', $request, $response);
+  }
+});
+
+/**
+ * System Relation [Schema 1] Unlink [Schema 2] Job
+ *
+ * @param RequestInterface $request
+ * @param ResponseInterface $response
+ */
+$this('event')->on('system-relation-%s-unlink-%s', function (
+  RequestInterface $request,
+  ResponseInterface $response
+) {
+  $meta = $this('event')->getEventEmitter()->getMeta();
+
+  if (isset($meta['variables'][0])) {
+    $request->setStage('schema1', $meta['variables'][0]);
+    $request->setStage('schema2', $meta['variables'][1]);
+    $this('event')->emit('system-relation-unlink', $request, $response);
+  }
+});
+
+/**
+ * System Relation [Schema 1] Unlink All [Schema 2] Job
+ *
+ * @param RequestInterface $request
+ * @param ResponseInterface $response
+ */
+$this('event')->on('system-relation-%s-unlink-all-%s', function (
+  RequestInterface $request,
+  ResponseInterface $response
+) {
+  $meta = $this('event')->getEventEmitter()->getMeta();
+
+  if (isset($meta['variables'][0])) {
+    $request->setStage('schema1', $meta['variables'][0]);
+    $request->setStage('schema2', $meta['variables'][1]);
+    $this('event')->emit('system-relation-unlink-all', $request, $response);
+  }
+});

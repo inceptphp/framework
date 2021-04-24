@@ -58,7 +58,7 @@ class ValidatorRegistry
   public static function makeValidator(string $name): ?ValidatorInterface
   {
     if (isset(self::$validators[$name])) {
-      return incept()->resolve(self::$validators[$name]);
+      return incept('resolver')->resolve(self::$validators[$name]);
     }
 
     return null;

@@ -12,6 +12,8 @@ use Incept\Framework\Validation\AbstractValidator;
 use Incept\Framework\Validation\ValidatorInterface;
 use Incept\Framework\Validation\ValidationTypes;
 
+use Incept\Framework\Framework;
+
 /**
  * Unique Validator
  *
@@ -40,24 +42,22 @@ class Unique extends AbstractValidator implements ValidatorInterface
    * Renders the executes the validation for object forms
    *
    * @param ?mixed  $value
-   * @param ?string $name  name of the field validating
-   * @param ?array  $row   the row submitted with the value
+   * @param ?string $name   name of the field validating
+   * @param ?array  $row    the row submitted with the value
+   * @param ?string $scehma
    *
    * @return bool
    */
-  public function valid($value = null, string $name = null, array $row = []): bool
-  {
-    $search = Service::get('sql')
-        ->getResource()
-        ->search($table)
-        ->addFilter($name . '= %s', $data[$name]);
-
-    if (isset($data[$primary])) {
-        $search->addFilter($primary . ' != %s', $data[$primary]);
-    }
-
-    if ($search->getTotal()) {
-        $errors[$name] = $validation['message'];
-    }
+  public function valid(
+    $value = null,
+    string $name = null,
+    array $row = [],
+    string $schema = null
+  ): bool {
+    //dont try this at home kids
+    return is_null($value) || !incept('event')->call('system-object-detail', [
+      'schema' => $schema,
+      $name => $value
+    ]);
   }
 }

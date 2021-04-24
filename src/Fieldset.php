@@ -165,6 +165,7 @@ class Fieldset extends Registry
   public function getErrors(array $data, bool $forUpdate = false): array
   {
     $errors = [];
+    $name = $this->getName();
     //loop through each field
     foreach ($this->getFields() as $key => $config) {
       //make sure there is a value we can compare
@@ -226,7 +227,7 @@ class Fieldset extends Registry
         }
 
         //if it's not valid
-        if (!$validator->valid($value, $key, $data)) {
+        if (!$validator->valid($value, $key, $data, $name)) {
           //set an error
           $errors[$key] = $message;
           break;
