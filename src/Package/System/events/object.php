@@ -107,7 +107,7 @@ $this('event')->on('system-object-create', function (
     }
 
     //link relations
-    $emitter->call('system-relation-link', [
+    $emitter->call('system-collection-link', [
       'schema1' => $data['schema'],
       'schema2' => $relation['name'],
       $primary => $id,
@@ -132,7 +132,7 @@ $this('event')->on('system-object-create', function (
     }
 
     //link relations
-    $emitter->call('system-relation-link', [
+    $emitter->call('system-collection-link', [
       'schema1' => $data['schema'],
       'schema2' => $relation['name'],
       $primary => $id,

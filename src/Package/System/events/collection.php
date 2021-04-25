@@ -299,7 +299,8 @@ $this('event')->on('system-collection-link', function (
   //set the payload
   $payload->setStage([
     'table' => $table,
-    'rows' => $rows
+    'rows' => $rows,
+    'with_primary' => true
   ]);
 
   //----------------------------//
