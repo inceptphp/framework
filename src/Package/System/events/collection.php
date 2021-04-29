@@ -366,8 +366,6 @@ $this('event')->on('system-collection-remove', function (
   $active = $schema->getFields('active');
   //eg. in = [product_id => [1, 2, 3], product_meta.ref1 => [1, 2, 3]]
   $filters = $system->mapIns([ $primary => $ids ], []);
-  //reset the json
-  $response->remove('json');
 
   //set the payload
   $payload->setStage([
@@ -454,8 +452,6 @@ $this('event')->on('system-collection-restore', function (
   $active = array_keys($active)[0];
   //eg. in = [product_id => [1, 2, 3]
   $filters = $system->mapIns([ $primary => $data[$primary] ], []);
-  //reset the json
-  $response->remove('json');
 
   //set the payload
   $payload->setStage([
@@ -845,8 +841,6 @@ $this('event')->on('system-collection-update', function (
 
   //we will use the original as the results later
   $original = $response->getResults();
-  //reset the json
-  $response->remove('json');
   //make a new payload
   $payload = $request->clone(true);
   //set the payload

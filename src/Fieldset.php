@@ -531,6 +531,83 @@ class Fieldset extends Registry
   }
 
   /**
+   * Prepares the given data to be saved into an eventual store
+   *
+   * @param array $data Values to prepare
+   *
+   * @return array
+   */
+  public function prepare(array $data, bool $defaults = false): array
+  {
+    //loop through each field
+    foreach ($this->getFields() as $key => $field) {
+      //if no value
+      if (!isset($data[$key])) {
+        //make a value
+        $data[$key] = null;
+        //if theres a default
+        if ($defaults && isset($field['default']) && $field['default']) {
+          //use the default
+          $data[$key] = $field['default'];
+        }
+      }
+
+      //load up the field
+      $field = $this->makeField($key);
+
+      //if no field
+      if (!$field) {
+        continue;
+      }
+
+      //prepare the value
+      $prepared = $field->prepare($data[$key], $key, $data);
+
+      if (!is_null($prepared)) {
+        $data[$key] = $prepared;
+      } else {
+        //it is false so unset
+        unset($data[$key]);
+      }
+    }
+
+    return $data;
+  }
+
+  /**
+   * Restores a fieldset
+   *
+   * @param ?string $path
+   *
+   * @return Fieldset
+   */
+  public function restore(?string $path = null): Fieldset
+  {
+    if (is_null($path) || !is_dir($path)) {
+      $path = static::$path;
+    }
+
+    if (is_null($path) || !is_dir($path)) {
+      throw SystemException::forFolderNotFound($path);
+    }
+
+    $name = $this->getName();
+
+    $source = sprintf('%s/_%s.php', $path, $name);
+    if (!file_exists($source)) {
+      throw SystemException::forArchiveNotFound($source);
+    }
+
+    $destination = sprintf('%s/%s.php', $path, $name);
+    if (file_exists($destination)) {
+      throw SystemException::forFileExists($destination);
+    }
+
+    rename($source, $destination);
+    return $this;
+  }
+
+  /**
    * Saves the fieldset to file
    *
    * @return Fieldset
@@ -607,82 +684,6 @@ class Fieldset extends Registry
     }
 
     return $rows;
-  }
-
-  /**
-   * Prepares the given data to be saved into an eventual store
-   *
-   * @param array $data Values to prepare
-   *
-   * @return array
-   */
-  public function prepare(array $data, bool $defaults = false): array
-  {
-    //loop through each field
-    foreach ($this->getFields() as $key => $field) {
-      //if no value
-      if (!isset($data[$key])) {
-        //make a value
-        $data[$key] = null;
-        //if theres a default
-        if ($defaults && isset($field['default']) && $field['default']) {
-          //use the default
-          $data[$key] = $field['default'];
-        }
-      }
-
-      //load up the field
-      $field = $this->makeField($key);
-
-      //if no field
-      if (!$field) {
-        continue;
-      }
-
-      //prepare the value
-      $prepared = $field->prepare($data[$key], $key, $data);
-      if (!is_null($prepared)) {
-        $data[$key] = $prepared;
-      } else {
-        //it is false so unset
-        unset($data[$key]);
-      }
-    }
-
-    return $data;
-  }
-
-  /**
-   * Restores a fieldset
-   *
-   * @param ?string $path
-   *
-   * @return Fieldset
-   */
-  public function restore(?string $path = null): Fieldset
-  {
-    if (is_null($path) || !is_dir($path)) {
-      $path = static::$path;
-    }
-
-    if (is_null($path) || !is_dir($path)) {
-      throw SystemException::forFolderNotFound($path);
-    }
-
-    $name = $this->getName();
-
-    $source = sprintf('%s/_%s.php', $path, $name);
-    if (!file_exists($source)) {
-      throw SystemException::forArchiveNotFound($source);
-    }
-
-    $destination = sprintf('%s/%s.php', $path, $name);
-    if (file_exists($destination)) {
-      throw SystemException::forFileExists($destination);
-    }
-
-    rename($source, $destination);
-    return $this;
   }
 
   /**

@@ -534,8 +534,6 @@ $this('event')->on('system-object-remove', function (
 
   //we will use the original as the results later
   $original = $response->getResults();
-  //reset the json
-  $response->remove('json');
   //make a new payload
   $payload = $request->clone(true);
   //set the payload
@@ -618,8 +616,6 @@ $this('event')->on('system-object-restore', function (
 
   //we will use the original as the results later
   $original = $response->getResults();
-  //reset the json
-  $response->remove('json');
   //make a new payload
   $payload = $request->clone(true);
   //set the payload
@@ -837,8 +833,6 @@ $this('event')->on('system-object-update', function (
 
   //we will use the original as the results later
   $original = $response->getResults();
-  //reset the json
-  $response->remove('json');
   //make a new payload
   $payload = $request->clone(true);
   //set the payload

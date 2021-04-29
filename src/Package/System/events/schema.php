@@ -223,8 +223,6 @@ $this('event')->on('system-schema-remove', function (
   $request->setStage('schema', $schema->getName());
   //make sure restorable is set
   $request->setStage('restorable', $restorable);
-  //reset the json
-  $response->remove('json');
   //trigger the store drop
   $this('event')->emit('system-store-drop', $request, $response);
 
@@ -283,8 +281,6 @@ $this('event')->on('system-schema-restore', function (
 
   //make sure schema is set
   $request->setStage('schema', $schema->getName());
-  //reset the json
-  $response->remove('json');
   //trigger the store recover
   $this('event')->emit('system-store-recover', $request, $response);
 
@@ -418,7 +414,6 @@ $this('event')->on('system-schema-update', function (
   // 3. Prepare Data
   //get the original for later
   $original = Schema::i($response->getResults());
-  $response->remove('json', 'results');
 
   //----------------------------//
   // 4. Process Data
