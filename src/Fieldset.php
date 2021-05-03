@@ -171,7 +171,7 @@ class Fieldset extends Registry
       //make sure there is a value we can compare
       //set value because it's possible for formatters to process null values
       $value = null;
-      if (isset($data[$key])) {
+      if (isset($data[$key]) && trim($data[$key])) {
         $value = $data[$key];
       }
 
