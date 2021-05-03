@@ -81,7 +81,6 @@ $this('event')->on('system-object-create', function (
   //----------------------------//
   // 4. Process Data
   $emitter->call('system-store-insert', $payload, $response);
-
   if ($response->isError() || !$response->hasResults()) {
     return;
   }
@@ -96,7 +95,7 @@ $this('event')->on('system-object-create', function (
     //set the 2nd primary
     $primary2 = $relation['primary2'];
     //if id is invalid
-    if (!isset($data[$primary2]) || !is_numeric($data[$primary2])) {
+    if (!isset($data[$primary2])) {
       //skip
       continue;
     }
@@ -121,7 +120,7 @@ $this('event')->on('system-object-create', function (
     //set the 2nd primary
     $primary2 = $relation['primary2'];
     //if id is invalid
-    if (!isset($data[$primary2]) || !is_numeric($data[$primary2])) {
+    if (!isset($data[$primary2])) {
       //skip
       continue;
     }
