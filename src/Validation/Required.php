@@ -47,6 +47,6 @@ class Required extends AbstractValidator implements ValidatorInterface
    */
   public function valid($value = null, string $name = null, array $row = []): bool
   {
-    return !is_null($value);
+    return !is_null($value) && trim($value);
   }
 }
