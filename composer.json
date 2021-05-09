@@ -12,7 +12,8 @@
     "php-coveralls/php-coveralls": "~2.4.3"
   },
   "require": {
-    "phpugph/components": "~1.0.0"
+    "phpugph/components": "~1.0.0",
+    "phpugph/handlebars": "~1.0.0"
   },
   "autoload": {
     "psr-4": {
