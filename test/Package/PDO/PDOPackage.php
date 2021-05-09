@@ -52,7 +52,6 @@ class Framework_PDO_PDOPackage_Test extends TestCase
   {
     $actual = $this->framework->package('pdo');
     $this->assertInstanceOf(Package::class, $actual);
-
     $actual = $actual->getPackageMethods();
     $this->assertTrue(is_array($actual));
 
@@ -77,7 +76,6 @@ class Framework_PDO_PDOPackage_Test extends TestCase
   {
     $actual = $this->framework->package('pdo')->disconnect('test');
     $this->assertInstanceOf(Package::class, $actual);
-
     $actual = $this->framework->package('pdo')->get('test', false);
     $this->assertNull($actual);
   }
