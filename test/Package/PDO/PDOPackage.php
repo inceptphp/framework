@@ -50,7 +50,10 @@ class Framework_PDO_PDOPackage_Test extends TestCase
    */
   public function testLoad()
   {
-    $actual = $this->framework->package('pdo')->getPackageMethods();
+    $actual = $this->framework->package('pdo');
+    $this->assertInstanceOf(Package::class, $actual);
+
+    $actual = $actual->getPackageMethods();
     $this->assertTrue(is_array($actual));
 
     $this->framework->package('pdo')->register('test', [
