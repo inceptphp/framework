@@ -49,8 +49,7 @@ class Hide extends AbstractFormatter implements FormatterInterface
     $value = null,
     string $name = null,
     array $row = []
-  ): ?string
-  {
+  ): ?string {
     return null;
   }
 }

@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 use StdClass;
 use PDO;
+use UGComponents\Package\Package;
 
 use Incept\Framework\Framework;
 
@@ -43,9 +44,9 @@ class Framework_PDO_PDOPackage_Test extends TestCase
   }
 
   /**
-   * @covers Incept\Framework\Package\PDO\PDOPackage::loadConfig
    * @covers Incept\Framework\Package\PDO\PDOPackage::register
    * @covers Incept\Framework\Package\PDO\PDOPackage::get
+   * @covers Incept\Framework\Package\PDO\PDOPackage::makeResource
    */
   public function testLoad()
   {
@@ -63,5 +64,36 @@ class Framework_PDO_PDOPackage_Test extends TestCase
 
     $actual = $this->framework->package('pdo')->get('test');
     $this->assertInstanceOf(PDO::class, $actual);
+  }
+
+  /**
+   * @covers Incept\Framework\Package\PDO\PDOPackage::disconnect
+   * @covers Incept\Framework\Package\PDO\PDOPackage::get
+   */
+  public function testDisconnect()
+  {
+    $actual = $this->framework->package('pdo')->disconnect('test');
+    $this->assertInstanceOf(Package::class, $actual);
+
+    $actual = $this->framework->package('pdo')->get('test', false);
+    $this->assertNull($actual);
+  }
+
+  /**
+   * @covers Incept\Framework\Package\PDO\PDOPackage::unregister
+   */
+  public function testUnregister()
+  {
+    $actual = $this->framework->package('pdo')->unregister('test');
+    $this->assertInstanceOf(Package::class, $actual);
+  }
+
+  /**
+   * @covers Incept\Framework\Package\PDO\PDOPackage::purgeRegistry
+   */
+  public function testPurgeRegistry()
+  {
+    $actual = $this->framework->package('pdo')->purgeRegistry();
+    $this->assertInstanceOf(Package::class, $actual);
   }
 }

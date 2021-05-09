@@ -150,7 +150,8 @@ class TerminalPackage extends TerminalHandler
   {
     //if dont display
     if (!$display) {
-      TerminalHelper::setMap(function() {});
+      TerminalHelper::setMap(function () {
+      });
     } else {
       TerminalHelper::setMap(null);
     }

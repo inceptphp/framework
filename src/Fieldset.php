@@ -120,7 +120,7 @@ class Fieldset extends Registry
    */
   public function format(array $data, string $type = 'list'): array
   {
-    //we store the formatted data hhere because order matters.
+    //we store the formatted data here because order matters.
     $formatted = [];
     //loop through each field
     foreach ($this->getFields() as $key => $field) {
@@ -171,7 +171,7 @@ class Fieldset extends Registry
       //make sure there is a value we can compare
       //set value because it's possible for formatters to process null values
       $value = null;
-      if (isset($data[$key]) && trim($data[$key])) {
+      if (isset($data[$key]) && $data[$key] !== '') {
         $value = $data[$key];
       }
 
@@ -452,8 +452,7 @@ class Fieldset extends Registry
   public function makeFormatter(
     string $name,
     string $type = 'list'
-  ): ?FormatterInterface
-  {
+  ): ?FormatterInterface {
     //if no field type
     if (!isset($this->fields[$name][$type]['format'])) {
       return null;
@@ -489,8 +488,8 @@ class Fieldset extends Registry
     } else if (isset($this->fields[$name]['field']['type'])
       && $this->fields[$name]['field']['type'] === 'fieldset'
       //and there's parameters
-      && isset ($this->fields[$name]['field']['parameters'][0])
-      && isset ($this->fields[$name]['field']['parameters'][1])
+      && isset($this->fields[$name]['field']['parameters'][0])
+      && isset($this->fields[$name]['field']['parameters'][1])
     ) {
       //load the fieldset
       $fieldset = Fieldset::load($this->fields[$name]['field']['parameters'][0]);

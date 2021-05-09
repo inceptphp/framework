@@ -1,6 +1,6 @@
 # Incept Framework
 
-[![Travis CI](https://travis-ci.org/inceptphp/framework.svg?branch=main)](https://travis-ci.org/inceptphp/framework)
+[![Travis CI](https://travis-ci.com/inceptphp/framework.svg?branch=main)](https://travis-ci.com/inceptphp/framework)
 [![Coverage Status](https://coveralls.io/repos/github/inceptphp/framework/badge.svg?branch=main)](https://coveralls.io/github/inceptphp/framework?branch=main)
 [![Latest Stable Version](https://poser.pugx.org/inceptphp/framework/v/stable)](https://packagist.org/packages/inceptphp/framework)
 [![Total Downloads](https://poser.pugx.org/inceptphp/framework/downloads)](https://packagist.org/packages/inceptphp/framework)
@@ -27,3 +27,11 @@ contribute to.
 2. Push your code to your remote forked version.
 3. Go back to your forked version on GitHub and submit a pull request.
 4. All pull requests will be passed to [Travis CI](https://travis-ci.com/github/inceptphp/framework) to be tested. Also note that [Coveralls](https://coveralls.io/github/inceptphp/framework) is also used to analyze the coverage of your contribution.
+
+## Setting Up PHPUnit
+
+```bash
+$ composer global require phpunit/phpunit
+$ export PATH=~/.composer/vendor/bin:$PATH
+$ XDEBUG_MODE=coverage phpunit -d memory_limit=512M --coverage-html ../../../public/test
+```

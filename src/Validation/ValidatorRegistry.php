@@ -27,9 +27,9 @@ class ValidatorRegistry
    *
    * @param *string $name
    *
-   * @return ?ValidatorInterface
+   * @return ?string
    */
-  public static function getValidator(string $name): ?ValidatorInterface
+  public static function getValidator(string $name): ?string
   {
     if (isset(self::$validators[$name])) {
       return self::$validators[$name];

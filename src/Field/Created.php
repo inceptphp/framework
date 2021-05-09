@@ -8,9 +8,6 @@
 
 namespace Incept\Framework\Field;
 
-use Incept\Framework\Field\AbstractField;
-use Incept\Framework\Field\FieldInterface;
-use Incept\Framework\Field\FieldTypes;
 use Incept\Framework\Format\FormatTypes;
 
 /**
@@ -142,8 +139,7 @@ class Created extends AbstractField implements FieldInterface
     $value = null,
     string $name = null,
     array $row = []
-  ): ?string
-  {
+  ): ?string {
     return null;
   }
 }

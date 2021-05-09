@@ -222,7 +222,7 @@ class PDOPackage
   public function purgeRegistry(): PDOPackage
   {
     //empty one by one, releasing the PDO resource pointer
-    foreach(array_keys($this->registry) as $name) {
+    foreach (array_keys($this->registry) as $name) {
       $this->unregister($name);
     }
     $this->registry = [];

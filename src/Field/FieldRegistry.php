@@ -8,16 +8,10 @@
 
 namespace Incept\Framework\Field;
 
+use UGComponents\Resolver\ResolverTrait;
+
 /**
  * Stores fields that are registered as usable
- *
- * @vendor   Incept
- * @package  System
- * @standard PSR-2
- */
-use UGComponents\Resolver\ResolverTrait;
-/**
- * Abstractly defines a field
  *
  * @vendor   Incept
  * @package  System

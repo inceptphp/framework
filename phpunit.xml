@@ -14,6 +14,25 @@
     <testsuite name="Framework Test Suite">
       <file>test/Framework.php</file>
       <file>test/Decorator.php</file>
+      <file>test/Schema.php</file>
+      <file>test/Fieldset.php</file>
+      <file>test/Fieldset/Validator.php</file>
+      <file>test/Field/AbstractField.php</file>
+      <file>test/Field/Active.php</file>
+      <file>test/Field/Created.php</file>
+      <file>test/Field/FieldRegistry.php</file>
+      <file>test/Field/None.php</file>
+      <file>test/Field/Updated.php</file>
+      <file>test/Format/AbstractFormatter.php</file>
+      <file>test/Format/FormatterRegistry.php</file>
+      <file>test/Format/Hide.php</file>
+      <file>test/Format/None.php</file>
+      <file>test/Schema/Validator.php</file>
+      <file>test/Validation/AbstractValidator.php</file>
+      <file>test/Validation/Required.php</file>
+      <file>test/Validation/Unique.php</file>
+      <file>test/Validation/ValidatorRegistry.php</file>
+      <file>test/SystemException.php</file>
       <file>test/Package/Config/ConfigException.php</file>
       <file>test/Package/Config/ConfigPackage.php</file>
       <file>test/Package/Event/EventPackage.php</file>
@@ -30,6 +49,13 @@
     <exclude>
       <directory>./vendor</directory>
       <directory>./test</directory>
+      <file>src/Field/FieldInterface.php</file>
+      <file>src/Field/FieldTypes.php</file>
+      <file>src/Fieldset/FieldsetTypes.php</file>
+      <file>src/Format/FormatterInterface.php</file>
+      <file>src/Format/FormatTypes.php</file>
+      <file>src/Validation/ValidatorInterface.php</file>
+      <file>src/Validation/ValidationTypes.php</file>
       <file>src/Package/Event/.incept.php</file>
       <file>src/Package/Http/.incept.php</file>
       <file>src/Package/Resolver/.incept.php</file>

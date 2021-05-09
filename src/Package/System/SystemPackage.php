@@ -100,14 +100,14 @@ class SystemPackage
         }
 
         if ($dirty === 'span') {
-          if(isset($query['span'][$key][0])
+          if (isset($query['span'][$key][0])
             && !is_numeric($query['span'][$key][0])
             && !$query['span'][$key][0]
           ) {
             unset($query['span'][$key][0]);
           }
 
-          if(isset($query['span'][$key][1])
+          if (isset($query['span'][$key][1])
             && !is_numeric($query['span'][$key][1])
             && !$query['span'][$key][1]
           ) {

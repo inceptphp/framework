@@ -76,7 +76,7 @@ class SystemException extends BaseException
    */
   public static function forArchiveNotFound($name): SystemException
   {
-    $message = sprintf(static::ERROR_ARCHHIVE_NOT_FOUND, $name);
+    $message = sprintf(static::ERROR_ARCHIVE_NOT_FOUND, $name);
     return new static($message);
   }
 
