@@ -263,8 +263,6 @@ $this('event')->on('system-object-detail', function (
   //attach forward joins
   foreach ($schema->getRelations() as $relationTable => $relation) {
     $name = $group = $relation->getName();
-    $primary2 = $relation->getPrimaryName();
-
     $isJoin = $data['join'] === 'all'
       || $data['join'] === 'forward'
       || (
@@ -278,87 +276,24 @@ $this('event')->on('system-object-detail', function (
       continue;
     }
 
-    //case for post_post
-    if ($name === $data['schema']) {
-      $group = '_children';
-    }
-
-    //make a default
-    $results[$group] = null;
-
-    //make a new payload
-    $payload = $request->clone(true);
-
-    //filter settings
-    $payload->setStage([
-      'table' => $name,
-      //eg. joins = [['type' => 'inner', 'table' => 'product', 'where' => 'product_id']]
-      'joins' => [
-        ['type' => 'inner', 'table' => $relationTable, 'where' => $primary2],
-        ['type' => 'inner', 'table' => $data['schema'], 'where' => $primary]
+    $primary1 = $relation->get('primary1');
+    $primary2 = $relation->get('primary2');
+    $child = $emitter->call('system-collection-search', [
+      'schema' => $name,
+      'filter' => [
+        $primary1 => $id
       ],
-      //eg. filters = [['where' => 'product_id =%s', 'binds' => [1]]]
-      'filters' => [
-        ['where' => $primary . ' =%s', 'binds' => [$id]]
-      ],
-      'range' => 0
+      'total' => 0
     ]);
 
     //if 1:0
-    if ($relation['many'] == 0) {
+    if ($relation['many'] == 0 && isset($child['rows'][0])) {
       //we only need one
-      $payload->setStage('range', 1);
-    }
-
-    $child = $emitter->call('system-store-search', $payload);
-
-    //if 1:0
-    if ($relation['many'] == 0 && isset($child[0])) {
-      //we only need one
-      $results[$group] = $child[0];
+      $results[$group] = $child['rows'][0];
       continue;
     }
 
-    $results[$group] = $child;
-  }
-
-  //attach reverse joins
-  foreach ($schema->getReverseRelations() as $relationTable => $relation) {
-    $name = $relation->getName();
-    $primary2 = $relation->getPrimaryName();
-
-    $isJoin = $data['join'] === 'all'
-      || $data['join'] === 'forward'
-      || (
-        is_array($data['join'])
-        && in_array($name, $data['join'])
-      );
-
-    //only join 1:N and N:N
-    //if it's not on the join list
-    if ($relation['many'] < 2 || !$isJoin) {
-      continue;
-    }
-
-    //make a new payload
-    $payload = $request->clone(true);
-
-    //filter settings
-    $payload->setStage([
-      'table' => $name,
-      //eg. joins = [['type' => 'inner', 'table' => 'product', 'where' => 'product_id']]
-      'joins' => [
-        ['type' => 'inner', 'table' => $relationTable, 'where' => $primary2],
-        ['type' => 'inner', 'table' => $data['schema'], 'where' => $primary]
-      ],
-      //eg. filters = [['where' => 'product_id =%s', 'binds' => [1]]]
-      'filters' => [
-        ['where' => $primary . ' =%s', 'binds' => [$id]]
-      ],
-      'range' => 0
-    ]);
-
-    $results[$name] = $emitter->call('system-store-search', $payload);
+    $results[$group] = $child['rows'];
   }
 
   $response->setError(false)->setResults($results);

@@ -206,14 +206,25 @@ class SystemPackage
     }
 
     foreach ($schema->getRelations() as $table => $relation) {
-      $name = $relation->getName();
-      $many = $relation->getMany();
-      $primary2 = $relation->getPrimaryName();
+      $name = $relation->get('name');
+      $many = $relation->get('many');
 
-      $isFilter = isset($data['filter'][$primary2]);
-      $isLike = isset($data['filter'][$primary2]);
-      $isIn = isset($data['filter'][$primary2]);
-      $isSpan = isset($data['filter'][$primary2]);
+      $primary1 = $relation->get('primary1');
+      $primary2 = $relation->get('primary2');
+
+      $isRecursive = $name === $schema->getName();
+
+      $isFilter = isset($data['filter'][$primary2])
+        || ($isRecursive && isset($data['filter'][$primary1]));
+
+      $isLike = isset($data['like'][$primary2])
+        || ($isRecursive && isset($data['like'][$primary1]));
+
+      $isIn = isset($data['in'][$primary2])
+        || ($isRecursive && isset($data['in'][$primary1]));
+
+      $isSpan = isset($data['span'][$primary2])
+        || ($isRecursive && isset($data['span'][$primary1]));
 
       $isJoin = (
         $many === 1 && (
@@ -234,21 +245,36 @@ class SystemPackage
       if (!$isJoin && !$isFilter && !$isLike && !$isIn && !$isEmpty && !$isNempty) {
         continue;
       }
+      //eg. post_post ON (product_id = product_id_2)
+      if ($isRecursive) {
+        $joins[] = [
+          'type' => 'inner',
+          'table' => $table,
+          'where' => sprintf('%s = %s', $primary2, $schema->getPrimaryName())
+        ];
+        continue;
+      }
 
       //eg. joins = [['type' => 'inner', 'table' => 'product', 'where' => 'product_id']]
-      $joins[] = ['type' => 'inner', 'table' => $table, 'where' => $primary];
+      $joins[] = ['type' => 'inner', 'table' => $table, 'where' => $primary1];
       $joins[] = ['type' => 'inner', 'table' => $name, 'where' => $primary2];
     }
 
     foreach ($schema->getReverseRelations() as $table => $relation) {
-      $name = $relation->getName();
-      $many = $relation->getMany();
-      $primary2 = $relation->getPrimaryName();
+      $name = $relation->get('name');
+      $many = $relation->get('many');
+      $primary1 = $relation->get('primary1');
+      $primary2 = $relation->get('primary2');
 
-      $isFilter = isset($data['filter'][$primary2]);
-      $isLike = isset($data['filter'][$primary2]);
-      $isIn = isset($data['filter'][$primary2]);
-      $isSpan = isset($data['filter'][$primary2]);
+      //ignore post_post for example because it's already covered
+      if ($name === $schema->getName()) {
+        continue;
+      }
+
+      $isFilter = isset($data['filter'][$primary1]);
+      $isLike = isset($data['filter'][$primary1]);
+      $isIn = isset($data['filter'][$primary1]);
+      $isSpan = isset($data['filter'][$primary1]);
 
       $isJoin = (
         $many === 1 && (
@@ -260,19 +286,19 @@ class SystemPackage
 
       $isEmpty = isset($data['empty'])
         && is_array($data['empty'])
-        && in_array($primary2, $data['empty']);
+        && in_array($primary1, $data['empty']);
 
       $isNempty = isset($data['nempty'])
         && is_array($data['nempty'])
-        && in_array($primary2, $data['nempty']);
+        && in_array($primary1, $data['nempty']);
 
       if (!$isJoin && !$isFilter && !$isLike && !$isIn && !$isEmpty && !$isNempty) {
         continue;
       }
 
       //eg. joins = [['type' => 'inner', 'table' => 'product', 'where' => 'product_id']]
-      $joins[] = ['type' => 'inner', 'table' => $table, 'where' => $primary];
-      $joins[] = ['type' => 'inner', 'table' => $name, 'where' => $primary2];
+      $joins[] = [ 'type' => 'inner', 'table' => $table, 'where' => $primary2 ];
+      $joins[] = [ 'type' => 'inner', 'table' => $name, 'where' => $primary1 ];
     }
 
     return $joins;
