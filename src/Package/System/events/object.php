@@ -118,25 +118,25 @@ $this('event')->on('system-object-create', function (
   //loop through all reverse relations
   foreach ($schema->getReverseRelations() as $table => $relation) {
     //set the 2nd primary
-    $primary2 = $relation['primary2'];
+    $primary1 = $relation['primary1'];
     //if id is invalid
-    if (!isset($data[$primary2])) {
+    if (!isset($data[$primary1])) {
       //skip
       continue;
     }
 
     //allow linking an array of IDs
-    if (!is_array($data[$primary2])) {
-      $data[$primary2] = [$data[$primary2]];
+    if (!is_array($data[$primary1])) {
+      $data[$primary1] = [$data[$primary1]];
     }
 
     //link relations
     $emitter->call('system-collection-link', [
-      'schema1' => $data['schema'],
-      'schema2' => $relation['name'],
+      'schema1' => $relation['name'],
+      'schema2' => $data['schema'],
       $primary => $id,
       //should consider array of ids
-      $primary2 => $data[$primary2],
+      $primary1 => $data[$primary1],
     ]);
   }
 
