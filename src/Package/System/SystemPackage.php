@@ -325,7 +325,7 @@ class SystemPackage
       'start',  'range'
     ];
 
-    foreach($keys as $key) {
+    foreach ($keys as $key) {
       if (isset($data[$key])) {
         $filters[$key] = $data[$key];
       }
