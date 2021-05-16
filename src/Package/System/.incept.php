@@ -24,6 +24,8 @@ $this('system')
   ->mapPackageMethods($this('resolver')->resolve(SystemPackage::class, $this));
 
 //register fields
+FieldRegistry::register(Incept\Framework\Field\Input::class);
+
 FieldRegistry::register(Incept\Framework\Field\None::class);
 
 FieldRegistry::register(Incept\Framework\Field\Active::class);
@@ -36,6 +38,8 @@ FieldRegistry::register(Incept\Framework\Field\Updated::class);
 ValidatorRegistry::register(Incept\Framework\Validation\Required::class);
 
 ValidatorRegistry::register(Incept\Framework\Validation\Unique::class);
+
+ValidatorRegistry::register(Incept\Framework\Validation\Expression::class);
 
 //register formats
 FormatterRegistry::register(Incept\Framework\Format\None::class);

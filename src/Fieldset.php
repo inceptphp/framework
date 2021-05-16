@@ -541,7 +541,7 @@ class Fieldset extends Registry
     //loop through each field
     foreach ($this->getFields() as $key => $field) {
       //if no value
-      if (!isset($data[$key])) {
+      if (!isset($data[$key]) || $data[$key] === '') {
         //make a value
         $data[$key] = null;
         //if theres a default

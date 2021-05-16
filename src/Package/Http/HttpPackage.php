@@ -50,6 +50,36 @@ class HttpPackage
   }
 
   /**
+   * @const string ALL
+   */
+  const ALL = 'all';
+
+  /**
+   * @const string GET
+   */
+  const GET = 'get';
+
+  /**
+   * @const string POST
+   */
+  const POST = 'post';
+
+  /**
+   * @const string PUT
+   */
+  const PUT = 'put';
+
+  /**
+   * @const string DELETE
+   */
+  const DELETE = 'delete';
+
+  /**
+   * @const string OPTIONS
+   */
+  const OPTIONS = 'options';
+
+  /**
    * @var *PackageHandler $handler
    */
   protected $handler;
@@ -75,7 +105,7 @@ class HttpPackage
    */
   public function all(string $path, $callback, ...$args): HttpPackage
   {
-    return $this->route('all', $path, $callback, ...$args);
+    return $this->route(static::ALL, $path, $callback, ...$args);
   }
 
   /**
@@ -89,7 +119,7 @@ class HttpPackage
    */
   public function delete(string $path, $callback, ...$args): HttpPackage
   {
-    return $this->route('delete', $path, $callback, ...$args);
+    return $this->route(static::DELETE, $path, $callback, ...$args);
   }
 
   /**
@@ -103,7 +133,7 @@ class HttpPackage
    */
   public function get(string $path, $callback, ...$args): HttpPackage
   {
-    return $this->route('get', $path, $callback, ...$args);
+    return $this->route(static::GET, $path, $callback, ...$args);
   }
 
   /**
@@ -117,7 +147,7 @@ class HttpPackage
    */
   public function options(string $path, $callback, ...$args): HttpPackage
   {
-    return $this->route('options', $path, $callback, ...$args);
+    return $this->route(static::OPTIONS, $path, $callback, ...$args);
   }
 
   /**
@@ -131,7 +161,7 @@ class HttpPackage
    */
   public function post(string $path, $callback, ...$args): HttpPackage
   {
-    return $this->route('post', $path, $callback, ...$args);
+    return $this->route(static::POST, $path, $callback, ...$args);
   }
 
   /**
@@ -145,7 +175,7 @@ class HttpPackage
    */
   public function put(string $path, $callback, ...$args): HttpPackage
   {
-    return $this->route('put', $path, $callback, ...$args);
+    return $this->route(static::PUT, $path, $callback, ...$args);
   }
 
   /**
@@ -165,7 +195,11 @@ class HttpPackage
     }
     // @codeCoverageIgnoreEnd
 
-    ($this->handler)('http')->getResponse()->addHeader('Location', $path);
+    $this->handler
+      ->package('http')
+      ->getResponse()
+      ->addHeader('Location', $path);
+
     return $this;
   }
 
@@ -179,8 +213,12 @@ class HttpPackage
    *
    * @return HttpPackage
    */
-  public function route(string $method, string $path, $callback, ...$args): HttpPackage
-  {
+  public function route(
+    string $method,
+    string $path,
+    $callback,
+    ...$args
+  ): HttpPackage {
     $router = $this->getRouter();
     array_unshift($args, $callback);
 
