@@ -109,7 +109,7 @@ class HostPackage
       $protocol = 'https';
     }
 
-    if (($this->handler)('config')->get('settings', 'https')) {
+    if ($this->handler->package('config')->get('settings', 'https')) {
       $protocol = 'https';
     }
 

@@ -161,6 +161,7 @@ class SystemPackage
   public function cleanStage(RequestInterface $request): RequestInterface
   {
     $clean = $this->cleanQuery($request->getStage());
+    //doing it this way forces the replacement of stage
     $request->set('stage', $clean);
     return $request;
   }
@@ -206,11 +207,11 @@ class SystemPackage
     }
 
     foreach ($schema->getRelations() as $table => $relation) {
-      $name = $relation->get('name');
-      $many = $relation->get('many');
+      $name = $relation['name'];
+      $many = $relation['many'];
 
-      $primary1 = $relation->get('primary1');
-      $primary2 = $relation->get('primary2');
+      $primary1 = $relation['primary1'];
+      $primary2 = $relation['primary2'];
 
       $isRecursive = $name === $schema->getName();
 
@@ -261,10 +262,11 @@ class SystemPackage
     }
 
     foreach ($schema->getReverseRelations() as $table => $relation) {
-      $name = $relation->get('name');
-      $many = $relation->get('many');
-      $primary1 = $relation->get('primary1');
-      $primary2 = $relation->get('primary2');
+      $name = $relation['name'];
+      $many = $relation['many'];
+
+      $primary1 = $relation['primary1'];
+      $primary2 = $relation['primary2'];
 
       //ignore post_post for example because it's already covered
       if ($name === $schema->getName()) {
@@ -315,44 +317,18 @@ class SystemPackage
   {
     $filters = [];
 
-    if (isset($data['q'])) {
-      $filters['q'] = $data['q'];
-    }
+    $keys = [
+      'q',      'filter',
+      'like',   'in',
+      'span',   'empty',
+      'nempty', 'order',
+      'start',  'range'
+    ];
 
-    if (isset($data['filter'])) {
-      $filters['filter'] = $data['filter'];
-    }
-
-    if (isset($data['like'])) {
-      $filters['like'] = $data['like'];
-    }
-
-    if (isset($data['in'])) {
-      $filters['in'] = $data['in'];
-    }
-
-    if (isset($data['span'])) {
-      $filters['span'] = $data['span'];
-    }
-
-    if (isset($data['empty'])) {
-      $filters['empty'] = $data['empty'];
-    }
-
-    if (isset($data['nempty'])) {
-      $filters['nempty'] = $data['nempty'];
-    }
-
-    if (isset($data['order'])) {
-      $filters['order'] = $data['order'];
-    }
-
-    if (isset($data['start'])) {
-      $filters['start'] = $data['start'];
-    }
-
-    if (isset($data['range'])) {
-      $filters['range'] = $data['range'];
+    foreach($keys as $key) {
+      if (isset($data[$key])) {
+        $filters[$key] = $data[$key];
+      }
     }
 
     return $this->cleanQuery($filters);
@@ -440,9 +416,7 @@ class SystemPackage
 
     foreach ($filters as $column => $value) {
       if (preg_match('/^[a-zA-Z0-9-_]+$/', $column)) {
-        $map[] = [
-          'where' => $column . ' = %s', 'binds' => [$value]
-        ];
+        $map[] = [ 'where' => "$column = %s", 'binds' => [ $value ] ];
         continue;
       }
 
@@ -463,9 +437,7 @@ class SystemPackage
       $path = preg_replace('/\.*([0-9]+)/', '[$1]', $path);
       $path = preg_replace('/([^\.]+\s[^\.]+)/', '""$1""', $path);
       $column = sprintf('JSON_EXTRACT(%s, "$%s")', $name, $path);
-      $map[] = [
-        'where' => $column . ' = %s', 'binds' => [$value]
-      ];
+      $map[] = [ 'where' => "$column = %s", 'binds' => [ $value ] ];
     }
 
     return $map;
@@ -485,9 +457,7 @@ class SystemPackage
 
     foreach ($filters as $column => $value) {
       if (preg_match('/^[a-zA-Z0-9-_]+$/', $column)) {
-        $map[] = [
-          'where' => $column . ' LIKE %s', 'binds' => [$value]
-        ];
+        $map[] = [ 'where' => "$column LIKE %s", 'binds' => [ $value ] ];
         continue;
       }
 
@@ -508,9 +478,7 @@ class SystemPackage
       $path = preg_replace('/\.*([0-9]+)/', '[$1]', $path);
       $path = preg_replace('/([^\.]+\s[^\.]+)/', '""$1""', $path);
       $column = sprintf('JSON_EXTRACT(%s, "$%s")', $name, $path);
-      $map[] = [
-        'where' => $column . ' LIKE %s', 'binds' => [$value]
-      ];
+      $map[] = [ 'where' => "$column LIKE %s", 'binds' => [ $value ] ];
     }
 
     return $map;
@@ -541,11 +509,11 @@ class SystemPackage
         $where = [];
         foreach ($value as $option) {
           $where[] = "JSON_SEARCH(LOWER($column), 'one', %s) IS NOT NULL";
-          $or[] = '%' . strtolower($option) . '%';
+          $or[] = sprintf('%%%s%%', strtolower($option));
         }
 
         $map[] = [
-          'where' => '(' . implode(' OR ', $where) . ')',
+          'where' => sprintf('(%s)', implode(' OR ', $where)),
           'binds' => $or
         ];
         continue;
@@ -581,7 +549,7 @@ class SystemPackage
       $column = sprintf('JSON_EXTRACT(%s, "$%s")', $name, $path);
       $where = array_fill(0, count($value), $column . ' = %s');
       $map[] = [
-        'where' => '(' . implode(' OR ', $where) . ')',
+        'where' => sprintf('(%s)', implode(' OR ', $where)),
         'binds' => $value
       ];
     }
@@ -637,16 +605,12 @@ class SystemPackage
       if (preg_match('/^[a-zA-Z0-9-_]+$/', $column)) {
         // minimum?
         if (isset($value[0]) && !empty($value[0])) {
-          $map[] = [
-            'where' => $column . ' >= %s', 'binds' => [$value[0]]
-          ];
+          $map[] = [ 'where' => "$column >= %s", 'binds' => [ $value[0] ] ];
         }
 
         // maximum?
         if (isset($value[1]) && !empty($value[1])) {
-          $map[] = [
-            'where' => $column . ' <= %s', 'binds' => [$value[1]]
-          ];
+          $map[] = [ 'where' => "$column <= %s", 'binds' => [ $value[1] ] ];
         }
 
         continue;
@@ -672,16 +636,12 @@ class SystemPackage
 
       // minimum?
       if (isset($value[0]) && !empty($value[0])) {
-        $map[] = [
-          'where' => $column . ' >= %s', 'binds' => [$value[0]]
-        ];
+        $map[] = [ 'where' => "$column >= %s", 'binds' => [ $value[0] ] ];
       }
 
       // maximum?
       if (isset($value[1]) && !empty($value[1])) {
-        $map[] = [
-          'where' => $column . ' <= %s', 'binds' => [$value[1]]
-        ];
+        $map[] = [ 'where' => "$column <= %s", 'binds' => [ $value[1] ] ];
       }
     }
 
@@ -702,9 +662,7 @@ class SystemPackage
 
     foreach ($filters as $column) {
       if (preg_match('/^[a-zA-Z0-9-_]+$/', $column)) {
-        $map[] = [
-          'where' => $column . ' IS NULL', 'binds' => []
-        ];
+        $map[] = [ 'where' => "$column IS NULL", 'binds' => [] ];
         continue;
       }
 
@@ -725,9 +683,7 @@ class SystemPackage
       $path = preg_replace('/\.*([0-9]+)/', '[$1]', $path);
       $path = preg_replace('/([^\.]+\s[^\.]+)/', '""$1""', $path);
       $column = sprintf('JSON_EXTRACT(%s, "$%s")', $name, $path);
-      $map[] = [
-        'where' => $column . ' IS NULL', 'binds' => []
-      ];
+      $map[] = [ 'where' => "$column IS NULL", 'binds' => [] ];
     }
 
     return $map;
@@ -747,9 +703,7 @@ class SystemPackage
 
     foreach ($filters as $column) {
       if (preg_match('/^[a-zA-Z0-9-_]+$/', $column)) {
-        $map[] = [
-          'where' => $column . ' IS NOT NULL', 'binds' => []
-        ];
+        $map[] = [ 'where' => "$column IS NOT NULL", 'binds' => [] ];
         continue;
       }
 
@@ -770,9 +724,7 @@ class SystemPackage
       $path = preg_replace('/\.*([0-9]+)/', '[$1]', $path);
       $path = preg_replace('/([^\.]+\s[^\.]+)/', '""$1""', $path);
       $column = sprintf('JSON_EXTRACT(%s, "$%s")', $name, $path);
-      $map[] = [
-        'where' => $column . ' IS NOT NULL', 'binds' => []
-      ];
+      $map[] = [ 'where' => "$column IS NOT NULL", 'binds' => [] ];
     }
 
     return $map;

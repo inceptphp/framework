@@ -20,6 +20,11 @@ use UGComponents\Data\Registry;
 class ConfigPackage
 {
   /**
+   * @const string PHP_HEADER
+   */
+  const PHP_HEADER = "<?php //-->\nreturn %s;";
+
+  /**
    * @var string $path
    */
   protected $path;
@@ -105,7 +110,7 @@ class ConfigPackage
   {
     if ($extra) {
       if (strpos($extra, '/') !== 0) {
-        $extra = '/' . $extra;
+        $extra = "/$extra";
       }
 
       return $this->path . $extra;
@@ -162,7 +167,7 @@ class ConfigPackage
 
     //save the file
     file_put_contents($destination, sprintf(
-      "<?php //-->\nreturn %s;",
+      static::PHP_HEADER,
       var_export($this->registry->get($file), true)
     ));
 
