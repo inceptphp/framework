@@ -47,7 +47,7 @@ $this('event')->on('system-schema-create', function (
     'fields',
     'relations',
     'suggestion',
-    'disable',
+    'disabled',
     'placeholder'
   ];
 
@@ -369,7 +369,7 @@ $this('event')->on('system-schema-update', function (
     'fields',
     'relations',
     'suggestion',
-    'disable',
+    'disabled',
     'placeholder'
   ];
 

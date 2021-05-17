@@ -230,6 +230,47 @@ class Schema extends Fieldset
   }
 
   /**
+   * Saves the fieldset to file
+   *
+   * @return Fieldset
+   */
+  public function save(string $path = null): Fieldset
+  {
+    //if there are fields
+    if (is_array($this->get('fields'))) {
+      //clean up indexes
+      foreach ($this->get('fields') as $i => $field) {
+        if (!isset($field['searchable'])) {
+          $field['searchable'] = 0;
+        }
+
+        if (!isset($field['filterable'])) {
+          $field['filterable'] = 0;
+        }
+
+        if (!isset($field['sortable'])) {
+          $field['sortable'] = 0;
+        }
+
+        $this->set('fields', $i, 'searchable', (int) $field['searchable']);
+        $this->set('fields', $i, 'filterable', (int) $field['filterable']);
+        $this->set('fields', $i, 'sortable', (int) $field['sortable']);
+      }
+    }
+
+    //if there are relations
+    if (is_array($this->get('relations'))) {
+      foreach ($this->get('relations') as $i => $relation) {
+        if (isset($relation['many'])) {
+          $this->set('relations', $i, 'many', (int) $relation['many']);
+        }
+      }
+    }
+
+    return parent::save($path);
+  }
+
+  /**
    * Returns fieldset classes that match the given filters
    *
    * @param array $filters Keys can be `path`, `active`, `name`
