@@ -131,11 +131,11 @@ class SystemPackage
       }
     }
 
-    //eg. order = [product_id => DESC
-    if (isset($query['order']) && is_array($query['order'])) {
-      foreach ($query['order'] as $key => $value) {
+    //eg. sort = [product_id => DESC
+    if (isset($query['sort']) && is_array($query['sort'])) {
+      foreach ($query['sort'] as $key => $value) {
         if (!preg_match('/^[a-zA-Z0-9_\.]+$/', $key)) {
-          unset($query['order'][$key]);
+          unset($query['sort'][$key]);
         }
       }
     }
@@ -321,7 +321,7 @@ class SystemPackage
       'q',      'filter',
       'like',   'in',
       'span',   'empty',
-      'nempty', 'order',
+      'nempty', 'sort',
       'start',  'range'
     ];
 

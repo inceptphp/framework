@@ -493,6 +493,10 @@ $this('event')->on('system-collection-search', function (
     $data['columns'] = '*';
   }
 
+  if (!isset($data['sort'])) {
+    $data['sort'] = [];
+  }
+
   if (!isset($data['start'])) {
     $data['start'] = 0;
   }
@@ -559,6 +563,7 @@ $this('event')->on('system-collection-search', function (
     'columns' => $data['columns'],
     'joins' => $joins,
     'filters' => $filters,
+    'sort' => $data['sort'],
     'start' => $data['start'],
     'range' => $data['range']
   ]);
