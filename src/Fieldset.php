@@ -613,6 +613,27 @@ class Fieldset extends Registry
    */
   public function save(string $path = null): Fieldset
   {
+    //if there are fields
+    if (is_array($this->get('fields'))) {
+      //clean up defaults
+      foreach ($this->get('fields') as $i => $field) {
+        //unset root
+        $this->remove('fields', $i, 'root');
+        //convert default
+        if (isset($field['default'])) {
+          if ($field['default'] === '') {
+            $this->set('fields', $i, 'default', null);
+          } else if (is_numeric($field['default'])) {
+            if (strpos($field['default'], '.') === false) {
+              $this->set('fields', $i, 'default', (int) $field['default']);
+            } else {
+              $this->set('fields', $i, 'default', (float) $field['default']);
+            }
+          }
+        }
+      }
+    }
+
     if (is_null($path) || !is_dir($path)) {
       $path = static::$path;
     }

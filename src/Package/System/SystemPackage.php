@@ -228,7 +228,7 @@ class SystemPackage
         || ($isRecursive && isset($data['span'][$primary1]));
 
       $isJoin = (
-        $many === 1 && (
+        $many == 1 && (
           $data['join'] === 'all' || $data['join'] === 'forward')
         )
         || (
@@ -279,7 +279,7 @@ class SystemPackage
       $isSpan = isset($data['filter'][$primary1]);
 
       $isJoin = (
-        $many === 1 && (
+        $many == 1 && (
           $data['join'] === 'all' || $data['join'] === 'reverse')
         )
         || (
