@@ -111,7 +111,7 @@ class Input extends AbstractField implements FieldInterface
       $input->setAttribute('name', $name);
     }
 
-    if ($value) {
+    if ($value || is_numeric($value)) {
       $input->setAttribute('value', $value);
     }
 
