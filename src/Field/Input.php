@@ -105,11 +105,13 @@ class Input extends AbstractField implements FieldInterface
       $input->setAttribute('type', static::INPUT_TYPE);
     }
 
-    if ($name) {
+    if ($this->name) {
+      $input->setAttribute('name', $this->name);
+    } else if ($name) {
       $input->setAttribute('name', $name);
     }
 
-    if ($value) {
+    if ($value || is_numeric($value)) {
       $input->setAttribute('value', $value);
     }
 
