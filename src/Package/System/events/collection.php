@@ -116,17 +116,13 @@ $this('event')->on('system-collection-create', function (
     return;
   }
 
-  //get the last id
-  $lastId = $response->getResults();
+  //NOTE: in a mass insert, the last id is actually the first id
+  $firstId = $response->getResults();
 
   foreach ($data['rows'] as $i => $row) {
     //re insert the id into the rows
-    //ex. 10 is the last id and there are 3 rows
-    // 1st = 10 - (3 - (0 + 1)) = 8
-    // 2nd = 10 - (3 - (1 + 1)) = 9
-    // 3rd = 10 - (3 - (2 + 1)) = 10
     if (!isset($data['rows'][$i][$primary])) {
-      $data['rows'][$i][$primary] = $lastId - (count($data['rows']) - ($i + 1));
+      $data['rows'][$i][$primary] = $firstId + $i;
     }
 
     $row[$primary] = $data['rows'][$i][$primary];
