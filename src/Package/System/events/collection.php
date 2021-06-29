@@ -95,6 +95,8 @@ $this('event')->on('system-collection-create', function (
   //for each row
   foreach ($data['rows'] as $i => $row) {
     //prepare the data
+    //NOTE: This removes the potential relational IDs
+    // (we need to reinsert these later)
     $data['rows'][$i] = $schema->prepare($row, true);
     //dont allow to insert the primary id
     unset($data['rows'][$i][$primary]);
@@ -135,6 +137,12 @@ $this('event')->on('system-collection-create', function (
     foreach ($schema->getRelations() as $table => $relation) {
       //set the 2nd primary
       $primary2 = $relation['primary2'];
+      //look in stage for this ID because prepare() would have removed this
+      $id2 = $request->getStage('rows', $i, $primary2);
+      //reinsert the relative id
+      if (is_numeric($id2)) {
+        $row[$primary2] = $id2;
+      }
       //if id is invalid
       if (!isset($row[$primary2]) || !is_numeric($row[$primary2])) {
         //skip
@@ -155,6 +163,12 @@ $this('event')->on('system-collection-create', function (
     foreach ($schema->getReverseRelations() as $table => $relation) {
       //set the 2nd primary
       $primary2 = $relation['primary2'];
+      //look in stage for this ID because prepare() would have removed this
+      $id2 = $request->getStage('rows', $i, $primary2);
+      //reinsert the relative id
+      if (is_numeric($id2)) {
+        $row[$primary2] = $id2;
+      }
       //if id is invalid
       if (!isset($row[$primary2]) || !is_numeric($row[$primary2])) {
         //skip
