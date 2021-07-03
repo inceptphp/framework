@@ -136,7 +136,7 @@ class Schema extends Fieldset
         || !trim($reversed[0]->get('table'))
         || !trim($reversed[0]->get('primary1'))
         || !trim($reversed[0]->get('primary2'))
-        || !trim($reversed[0]->get('many'))
+        || !is_numeric($reversed[0]->get('many'))
         //dont do post_post
         || $relation->getName() === $table
       ) {
