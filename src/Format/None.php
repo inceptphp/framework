@@ -50,6 +50,14 @@ class None extends AbstractFormatter implements FormatterInterface
     string $name = null,
     array $row = []
   ): ?string {
+    if (is_array($value)) {
+      return 'Array()';
+    }
+
+    if (is_object($value)) {
+      return 'Object()';
+    }
+
     return $value;
   }
 }
