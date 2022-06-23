@@ -52,7 +52,7 @@ class ConfigPackage
    */
   public function exists(string $file, ...$path): bool
   {
-    if (!is_dir($this->path)) {
+    if (!is_dir((string) $this->path)) {
       throw ConfigException::forFolderNotSet();
     }
 
@@ -80,7 +80,7 @@ class ConfigPackage
    */
   public function get(string $file, ...$path)
   {
-    if (!is_dir($this->path)) {
+    if (!is_dir((string) $this->path)) {
       throw ConfigException::forFolderNotSet();
     }
 
@@ -139,7 +139,7 @@ class ConfigPackage
    */
   public function set(string $file, ...$path): ConfigPackage
   {
-    if (!is_dir($this->path)) {
+    if (!is_dir((string) $this->path)) {
       throw ConfigException::forFolderNotSet();
     }
 

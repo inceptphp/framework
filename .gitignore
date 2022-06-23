@@ -6,3 +6,4 @@ composer.phar
 /logs/
 *.db
 .phpunit.result.cache
+composer.lock
