@@ -184,7 +184,7 @@ class SystemPackage
         continue;
       }
 
-      $row[$key] = json_decode($row[$key], true);
+      $row[$key] = json_decode($row[$key] ?? '', true);
     }
 
     return $row;

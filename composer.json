@@ -7,13 +7,13 @@
   ],
   "license": "LGPL-2.1-or-later",
   "require-dev": {
+    "php-coveralls/php-coveralls": "2.5.2",
     "phpunit/phpunit": "9.5.21",
-    "squizlabs/php_codesniffer": "3.7.1",
-    "php-coveralls/php-coveralls": "2.5.2"
+    "squizlabs/php_codesniffer": "3.7.1"
   },
   "require": {
-    "phpugph/components": "1.0.5",
-    "phpugph/handlebars": "1.0.3"
+    "phpugph/components": "1.0.6",
+    "phpugph/handlebars": "1.0.4"
   },
   "autoload": {
     "psr-4": {
