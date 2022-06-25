@@ -98,7 +98,7 @@ class Input extends AbstractField implements FieldInterface
     $input->setAttribute('class', 'form-control system-form-control');
 
     foreach ($this->attributes as $key => $attribute) {
-      $input->setAttribute($key, $attribute);
+      $input->setAttribute($key, (string) $attribute);
     }
 
     if (static::INPUT_TYPE) {

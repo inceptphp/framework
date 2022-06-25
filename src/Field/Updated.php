@@ -50,8 +50,8 @@ class Updated extends Created
    */
   public function prepare($value = null, string $name = null, array $row = [])
   {
-    if (strtotime($value) !== false) {
-      return date('Y-m-d H:i:s', strtotime($value));
+    if (strtotime($value ?? '') !== false) {
+      return date('Y-m-d H:i:s', strtotime($value ?? ''));
     }
 
     return date('Y-m-d H:i:s');

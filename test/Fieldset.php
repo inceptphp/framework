@@ -149,11 +149,11 @@ class Package_System_Fieldset_Test extends TestCase
   public function testGetForm()
   {
     $form = $this->object->getForm();
-    $this->assertTrue(!!trim((string) $form['foo_title']));
-    $this->assertTrue(!trim((string) $form['foo_formula']));
-    $this->assertTrue(!trim((string) $form['foo_active']));
-    $this->assertTrue(!trim((string) $form['foo_created']));
-    $this->assertTrue(!trim((string) $form['foo_updated']));
+    $this->assertTrue(!!trim($form['foo_title']));
+    $this->assertTrue(!trim($form['foo_formula']));
+    $this->assertTrue(!trim($form['foo_active']));
+    $this->assertTrue(!trim($form['foo_created']));
+    $this->assertTrue(!trim($form['foo_updated']));
   }
 
   /**
