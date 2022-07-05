@@ -142,7 +142,10 @@ $this('event')->on('system-object-create', function (
 
   //lastly return the detail
   $response->remove('json', 'results');
-  $emitter->call('system-object-detail', [ $primary => $id ], $response);
+  $emitter->call('system-object-detail', [
+    'schema' => $data['schema'],
+    $primary => $id 
+  ], $response);
 });
 
 /**
