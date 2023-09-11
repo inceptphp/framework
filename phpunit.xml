@@ -1,48 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-  backupGlobals="false"
-  backupStaticAttributes="false"
-  colors="true"
-  convertErrorsToExceptions="true"
-  convertNoticesToExceptions="true"
-  convertWarningsToExceptions="true"
-  processIsolation="false"
-  stopOnFailure="false"
-  bootstrap="test/bootstrap.php"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  backupGlobals="false" 
+  colors="true" 
+  processIsolation="false" 
+  stopOnFailure="false" 
+  bootstrap="test/bootstrap.php" 
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd" 
+  cacheDirectory=".phpunit.cache" 
+  backupStaticProperties="false"
 >
   <testsuites>
     <testsuite name="Framework Test Suite">
-      <file>test/Framework.php</file>
-      <file>test/Decorator.php</file>
-      <file>test/Schema.php</file>
-      <file>test/Fieldset.php</file>
-      <file>test/Fieldset/Validator.php</file>
-      <file>test/Field/AbstractField.php</file>
-      <file>test/Field/Active.php</file>
-      <file>test/Field/Created.php</file>
-      <file>test/Field/FieldRegistry.php</file>
-      <file>test/Field/None.php</file>
-      <file>test/Field/Updated.php</file>
-      <file>test/Format/AbstractFormatter.php</file>
-      <file>test/Format/FormatterRegistry.php</file>
-      <file>test/Format/Hide.php</file>
-      <file>test/Format/None.php</file>
-      <file>test/Schema/Validator.php</file>
-      <file>test/Validation/AbstractValidator.php</file>
-      <file>test/Validation/Required.php</file>
-      <file>test/Validation/Unique.php</file>
-      <file>test/Validation/ValidatorRegistry.php</file>
-      <file>test/SystemException.php</file>
-      <file>test/Package/Config/ConfigException.php</file>
-      <file>test/Package/Config/ConfigPackage.php</file>
-      <file>test/Package/Event/EventPackage.php</file>
-      <file>test/Package/Host/HostPackage.php</file>
-      <file>test/Package/Http/HttpPackage.php</file>
-      <file>test/Package/PDO/PDOPackage.php</file>
+      <file>test/FrameworkTest.php</file>
+      <file>test/DecoratorTest.php</file>
+      <file>test/SchemaTest.php</file>
+      <file>test/FieldsetTest.php</file>
+      <file>test/Fieldset/ValidatorTest.php</file>
+      <file>test/Field/AbstractFieldTest.php</file>
+      <file>test/Field/ActiveTest.php</file>
+      <file>test/Field/CreatedTest.php</file>
+      <file>test/Field/FieldRegistryTest.php</file>
+      <file>test/Field/NoneTest.php</file>
+      <file>test/Field/UpdatedTest.php</file>
+      <file>test/Format/AbstractFormatterTest.php</file>
+      <file>test/Format/FormatterRegistryTest.php</file>
+      <file>test/Format/HideTest.php</file>
+      <file>test/Format/NoneTest.php</file>
+      <file>test/Schema/ValidatorTest.php</file>
+      <file>test/Validation/AbstractValidatorTest.php</file>
+      <file>test/Validation/RequiredTest.php</file>
+      <file>test/Validation/UniqueTest.php</file>
+      <file>test/Validation/ValidatorRegistryTest.php</file>
+      <file>test/SystemExceptionTest.php</file>
+      <file>test/Package/Config/ConfigExceptionTest.php</file>
+      <file>test/Package/Config/ConfigPackageTest.php</file>
+      <file>test/Package/Event/EventPackageTest.php</file>
+      <file>test/Package/Host/HostPackageTest.php</file>
+      <file>test/Package/Http/HttpPackageTest.php</file>
+      <file>test/Package/PDO/PDOPackageTest.php</file>
     </testsuite>
   </testsuites>
 
-  <coverage processUncoveredFiles="false" pathCoverage="true">
+  <coverage pathCoverage="true"/>
+  <source>
     <include>
       <directory suffix=".php">./src</directory>
     </include>
@@ -65,5 +66,5 @@
       <file>src/Package/Language/.incept.php</file>
       <file>src/Package/Timezone/.incept.php</file>
     </exclude>
-  </coverage>
+  </source>
 </phpunit>

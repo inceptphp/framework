@@ -125,6 +125,11 @@ abstract class AbstractField
   protected $name = null;
 
   /**
+   * @var mixed $value The value of the field
+   */
+  protected $value = null;
+
+  /**
    * @var array $attributes Hash of attributes to consider when rendering
    */
   protected $attributes = [];
